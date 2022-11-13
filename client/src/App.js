@@ -17,7 +17,7 @@ function App() {
  
   console.log(admin);
   useEffect(() => {
-    setAdmin('NoLogin');
+    setAdmin('Admin');
   }, []);
 
   return (

@@ -20,15 +20,21 @@ app.use(express.json());
 // });
 
 const SqlDB = mysql.createConnection({
-  host: "6cb.h.filess.io",
-  // host:'localhost',
-  port: "3307",
-  user: "millproject_childgift",
-  password: "b6864e2d23b4e4aa8fdc0c0cf88dbf7b868f55f3",
-  database: "millproject_childgift",
-  localAddress:
-    "mysql://millproject_childgift:b6864e2d23b4e4aa8fdc0c0cf88dbf7b868f55f3@6cb.h.filess.io:3307/millproject_childgift",
+  user: "root",
+  host: "localhost",
+  password: "12345",
+  database: "mill_project",
 });
+
+// const SqlDB = mysql.createConnection({
+//   host: '6cb.h.filess.io',
+//   // host: 'localhost',
+//   user: 'millproject_childgift',
+//   password: 'b6864e2d23b4e4aa8fdc0c0cf88dbf7b868f55f3',
+//   database: 'millproject_childgift',
+//   port:'3307',
+// localAddress:'mysql://millproject_childgift:b6864e2d23b4e4aa8fdc0c0cf88dbf7b868f55f3@6cb.h.filess.io:3307/millproject_childgift'
+// });
 
 // SqlDB.connect((err) => {
 //   if (err) throw err;

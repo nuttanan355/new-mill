@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
 import "../../css/signIn.css";
+import Axios from 'axios'
+import { response } from "express";
+
+
 
 function genKey() {
   var text = "";
@@ -11,6 +15,8 @@ function genKey() {
   return text;
 }
 
+
+
 export default function SignUp() {
   const [value, setValue] = useState({
     uid: genKey(),
@@ -19,6 +25,24 @@ export default function SignUp() {
     password: "",
     passwordConfirm: "",
   });
+
+  const addUser = () => {
+    Axios.post('http://localhost:3003/user/sign-up', {
+      uid: value.uid,
+      fullName: value.fullName,
+      phone: value.phone,
+      password: value.password,
+    }).then((response) => {
+      console.log("inserted successfully..")
+    })
+    // alert(value.fullName);
+  }
+
+  const getApiTest = () => {
+    Axios.get('https://jsonplaceholder.typicode.com/todos/1').then((response) => {
+      console.log(response.data);
+    })
+  }
 
   const handleChange = (e) => {
     setValue({ ...value, [e.target.name]: e.target.value });
@@ -70,8 +94,9 @@ export default function SignUp() {
       try {
         console.log(value);
         console.log("เตรียมเข้า DB");
+        addUser();
       } catch (error) {
-        console.log(error);
+        console.log(`err after click sign up ${error}`);
       }
     }
   };
@@ -97,6 +122,7 @@ export default function SignUp() {
                 className="input100"
                 type="text"
                 name="fullName"
+                id="fullname"
                 placeholder="ชื่อ - สกุล"
                 onChange={handleChange}
               />
@@ -153,6 +179,15 @@ export default function SignUp() {
                 type="button"
                 className="btn btn-primary"
                 onClick={() => handleSubmit()}
+              >
+                Sign Up
+              </button>
+            </div>
+            <div className="d-grid">
+              <button
+                type="button"
+                className="btn btn-outline-danger"
+                onClick={getApiTest}
               >
                 Sign Up
               </button>

@@ -38,7 +38,7 @@ export default function SignUp() {
     // alert(value.fullName);
   }
 
-  const getApiTest = () => {
+  const getApiTest = () => { //this fn create for test get api only.
     Axios.get('https://jsonplaceholder.typicode.com/todos/1').then((response) => {
       console.log(response.data);
     })

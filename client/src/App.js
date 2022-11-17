@@ -14,7 +14,7 @@ import NavbarIndex from "./layout/NavbarIndex";
 
 function App() {
   const [admin, setAdmin] = useState();
- 
+
   console.log(admin);
   useEffect(() => {
     setAdmin('Admin');

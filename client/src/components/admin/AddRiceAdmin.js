@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import axios from 'axios';
 import {
   Button,
   Card,
@@ -14,6 +15,8 @@ var saveCurrentDate = d.getDate() + "-" + d.getMonth() + "-" + d.getFullYear();
 var saveCurrentTime =
   d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
 var dateKey = saveCurrentDate + "," + saveCurrentTime;
+
+
 
 function genKey() {
   var text = "";
@@ -46,7 +49,13 @@ export default function AddRiceAdmin() {
     RiceReturn: false,
     RiceID: genKey(),
   });
-  
+
+  function postRice() {
+    axios.post('http://localhost:3030/admin/addrice', {
+      category: values.RiceCategory
+    })
+  }
+
   console.log(values);
 
   const handleOnChange = (e) => {
@@ -113,7 +122,9 @@ export default function AddRiceAdmin() {
               onChange={handleOnChange}
               required
             >
-              <option value="">ผู้ฝาก</option>
+              <option value="ผู้ฝาก">ผู้ฝาก</option>
+              <option value="ผู้ฝาก1">ผู้ฝาก1</option>
+              <option value="ผู้ฝาก2">ผู้ฝาก2</option>
               {Object.keys(users).map((item, keys) => {
                 return (
                   <option
@@ -220,6 +231,7 @@ export default function AddRiceAdmin() {
                 // ShowImgMoth.length === 0
               }
               type="button"
+              onClick={postRice}
             >
               Submit
             </button>

@@ -1,13 +1,12 @@
-const express = require('express')
+const express = require("express");
 const app = express();
-
 const mysql = require("mysql");
 const cors = require("cors");
 
+const PORT = 3030;
 
-const PORT = 3003;
-
-app.use(cors());
+app.use(cors(
+));
 app.use(express.json());
 
 
@@ -15,30 +14,19 @@ app.use(express.json());
 // const SqlDB = mysql.createConnection({
 //   user: "root",
 //   host: "localhost",
-//   password: "12345",
+//   password: "",
 //   database: "mill_project",
 // });
 
 const SqlDB = mysql.createConnection({
-  host: "6cb.h.filess.io",
-  // host:'localhost',
-  port: "3307",
-  user: "millproject_childgift",
-  password: "b6864e2d23b4e4aa8fdc0c0cf88dbf7b868f55f3",
-  database: "millproject_childgift",
-  localAddress:
-    "mysql://millproject_childgift:b6864e2d23b4e4aa8fdc0c0cf88dbf7b868f55f3@6cb.h.filess.io:3307/millproject_childgift",
+  host: '6cb.h.filess.io',
+  // host: 'localhost',
+  user: 'millproject_childgift',
+  password: 'b6864e2d23b4e4aa8fdc0c0cf88dbf7b868f55f3',
+  database: 'millproject_childgift',
+  port: '3307',
+  localAddress: 'mysql://millproject_childgift:b6864e2d23b4e4aa8fdc0c0cf88dbf7b868f55f3@6cb.h.filess.io:3307/millproject_childgift'
 });
-
-// const SqlDB = mysql.createConnection({
-//   host: '6cb.h.filess.io',
-//   // host: 'localhost',
-//   user: 'millproject_childgift',
-//   password: 'b6864e2d23b4e4aa8fdc0c0cf88dbf7b868f55f3',
-//   database: 'millproject_childgift',
-//   port:'3307',
-// localAddress:'mysql://millproject_childgift:b6864e2d23b4e4aa8fdc0c0cf88dbf7b868f55f3@6cb.h.filess.io:3307/millproject_childgift'
-// });
 
 // SqlDB.connect((err) => {
 //   if (err) throw err;
@@ -58,28 +46,18 @@ app.get("/rice", (req, res) => {
     }
   });
 });
+
 app.get("/", (req, res) => {
-  res.send("server start");
+  res.send("start");
 });
 
-
-app.post('/user/sign-up', (req, res) => {
-  const uid = req.body.uid;
-  const name = req.body.fullName;
-  const phone = req.body.phone;
-  const password = req.body.password;
-
-
-  SqlDB.query("INSERT INTO Users (uid,name,phone,upassword,type) VALUE (?, ?, ?, ?, ?)", [uid, name, phone, password, "0"],
-    (err, reqult) => {
-      if (err) {
-        console.log(err);
-      } else {
-        res.send("value inserted")
-      }
-    })
+app.post('/admin/addrice', (req, res) => {
+  category = req.body.category;
+  res.send(`category => ${category}`);
+  console.log(category)
 })
 
+// app.post('user/regis')
 
 // app.post("/create", (req, res) => {
 //   const name = req.body.name;
@@ -129,5 +107,5 @@ app.post('/user/sign-up', (req, res) => {
 // });
 
 app.listen(PORT, () => {
-  console.log(`Yey, your server is running on port  ${PORT}`);
+  console.log(`Yey, your server is running on port ${PORT}`);
 });

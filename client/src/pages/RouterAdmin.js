@@ -10,6 +10,8 @@ import EditRiceAdmin from "../components/admin/EditRiceAdmin";
 // import test from "./test";
 
 
+
+
 export const RouterAdmin = [
   {
     path: "*",

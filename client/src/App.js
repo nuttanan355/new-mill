@@ -1,63 +1,34 @@
-import { useEffect, useState } from "react";
-import { Spinner } from "react-bootstrap";
-import { Route, Routes } from "react-router-dom";
-import "./css/App.css";
-
-import { RouterAdmin } from "./pages/RouterAdmin";
-import NavbarAdmin from "./layout/NavbarAdmin";
-
-import { RouterUser } from "./pages/RouterUser";
-import { RouterNoLogin } from "./pages/RouterNoLogin";
-
-import Footer from "./layout/Footer";
-import NavbarIndex from "./layout/NavbarIndex";
-
+import React, { useState } from 'react'
+import { Routes, Route } from 'react-bootstrap';
+import axios, { AxiosHeaders } from 'axios';
+import { NavBar } from './test/components/NavBar.js';
+import { getUser } from './components/admin/getUser';
 function App() {
-  const [admin, setAdmin] = useState();
+  const [AllUserRole, setAllUserRole] = useState([]);
 
-  console.log(admin);
-  useEffect(() => {
-    setAdmin('Admin');
-  }, []);
+
+  const getUserRole = () => {
+    axios.get('http://localhost:3030/admin/getuser').then((response) => {
+      setAllUserRole(response.data)
+    })
+  }
 
   return (
     <div>
-      {admin === "Admin" ? (
-        <>
-          <NavbarAdmin />
-          <Routes>
-            {RouterAdmin.map(({ path, element }, key) => {
-              return <Route index path={path} element={element} key={key} />;
-            })}
-          </Routes>
-        </>
-      ) : admin === "User" ? (
-        <>
-          <NavbarIndex />
-          <Routes>
-            {RouterUser.map(({ path, element }, key) => {
-              return <Route index path={path} element={element} key={key} />;
-            })}
-          </Routes>
-          <Footer />
-        </>
-      ) : admin === "NoLogin" ? (
-        <>
-          <NavbarIndex />
-          <Routes>
-            {RouterNoLogin.map(({ path, element }, key) => {
-              return <Route index path={path} element={element} key={key} />;
-            })}
-          </Routes>
-          <Footer />
-        </>
-      ) : (
-        <div className="wait-spinner">
-          <Spinner animation="border" variant="success" />
-        </div>
-      )}
+      <button onClick={getUserRole}>getUser</button>
+      {AllUserRole.map((val, key) => {
+        return (
+          <div>
+            All : {val.AllUser}
+            <br />
+            Admin : {val.countAdmin}
+            <br />
+            User : {val.countUser}
+          </div>
+        )
+      })}
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

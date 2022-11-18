@@ -51,10 +51,16 @@ app.get("/", (req, res) => {
   res.send("start");
 });
 
-app.post('/admin/addrice', (req, res) => {
-  category = req.body.category;
-  res.send(`category => ${category}`);
-  console.log(category)
+const getuser = "SELECT COUNT(type) 'AllUser',COUNT(IF(type = 'Admin',1,NULL)) 'countAdmin',COUNT(IF(type = 'User',1,NULL)) 'countUser' FROM Users"
+
+app.get('/admin/getuser', (req, res) => {
+  SqlDB.query(getuser, (err, result) => {
+    if (err) {
+      console.log(`get Users Error : ${err}`)
+    } else {
+      res.send(result);
+    }
+  })
 })
 
 // app.post('user/regis')

@@ -39,7 +39,10 @@ function NavbarAdmin() {
               <Nav.Link className="item-nav-admin" href="/admin/manage-user">
                 Manage User
               </Nav.Link>
-
+              <Nav.Link className="item-nav-admin" href="admin/qr-scanner">
+                Scan QR
+              </Nav.Link>
+              
               <Nav.Link
                 className="item-nav-admin-logout"
               // onClick={() =>

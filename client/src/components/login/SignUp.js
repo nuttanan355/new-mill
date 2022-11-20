@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import Swal from "sweetalert2";
 import "../../css/signIn.css";
@@ -68,8 +69,48 @@ export default function SignUp() {
       });
     } else {
       try {
-        console.log(value);
-        console.log("เตรียมเข้า DB");
+        const jsonData = {
+          uid: value.uid,
+          name: value.fullName,
+          phone: value.phone,
+          password: value.passwordConfirm,
+          type: "User",
+        };
+        // ----------------------------axja--------------
+
+        // fetch("http://localhost:3030/signUp", {
+        //   method: "POST",
+        //   headers: { "Content-Type": "application/json" },
+        //   body: JSON.stringify(jsonData),
+        // })
+        //   .then((response) => response.json())
+        //   .then((data) => {
+        //     if (data.status === "ok") {
+        //       alert("SignUp sucess");
+        //       window.location = "/";
+        //     } else {
+        //       alert("SignUp failed");
+        //     }
+        //     // console.log("Success:", data);
+        //   })
+        //   .catch((error) => {
+        //     console.error("Error:", error);
+        //   });
+
+        axios({
+          method: "POST",
+          url: "http://localhost:3030/signUp",
+          data: jsonData,
+        }).then((data) => {
+          if (data.status === "ok") {
+            alert("SignUp sucess");
+            window.location = "/";
+          } else {
+            alert("SignUp failed");
+          }
+        }).catch((err)=>{
+          console.error("Error:", err);
+        });
       } catch (error) {
         console.log(error);
       }

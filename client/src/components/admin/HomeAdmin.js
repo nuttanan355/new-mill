@@ -1,7 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Card, Col, Container, Row } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  ModalDialog,
+  Row,
+} from "react-bootstrap";
 import ListRiceAdmin from "./ListRiceAdmin";
-import { QrReader } from 'react-qr-reader';
+import { QrReader } from "react-qr-reader";
+import { Grid, Icon, Link } from "@mui/material";
+import * as IconMd from "react-icons/md";
+import { color } from "@mui/system";
+// import { mdiQrcodeScan } from '@mdi/js';
 
 // import QrScan from 'react-qr-reader';
 
@@ -19,7 +30,7 @@ export default function HomeAdmin() {
     return AllUsers.filter((user) => user === typeUser);
   };
 
-  const [data, setData] = useState('No result');
+  const [data, setData] = useState("No result");
   const handleScan = (data) => console.log(data);
   const handleError = (err) => console.error(err);
 
@@ -51,34 +62,19 @@ export default function HomeAdmin() {
 
   return (
     <div className="container mt-3">
-      <div>
-      <span>QR Scanner</span>
-            
-            <center>
-            {/* <div style={{marginTop:30}}>
-                <QrReader
-                    delay={300}
-                    onError={handleError}
-                    onScan={handleScan}
-                    style={{ height: 240, width: 320 }}
-                />
-            </div> */}
-            </center>
-            <QrReader
-        onResult={(result, error) => {
-          if (!!result) {
-            setData(result?.text);
-          }
+      <Container> 
+      <h1>Scan QR</h1>
+          <hr />
+            <Link className="mb-5 btn btn-info" href="admin/qr-scanner">
+              <IconMd.MdOutlineQrCodeScanner
+                style={{ height: 240, width: 320 ,color: 'black'}}
+              />
+            </Link>
+      </Container>
 
-          if (!!error) {
-            console.info(error);
-          }
-        }}
-        style={{ width: '100%' }}
-      />
-      </div>
 
-      <div style={{ display: "flex", flexWrap: "wrap" }}>
+
+      {/* <div style={{ display: "flex", flexWrap: "wrap" }}>
         <div style={{ display: "block", width: "100%" }}>
           <h1>All Rice : {AllRice.length}</h1>
         </div>
@@ -486,7 +482,7 @@ export default function HomeAdmin() {
             </Card.Footer>
           </Card>
         </div>
-      </div>
+      </div> */}
 
       <Container>
         <Row>

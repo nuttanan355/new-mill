@@ -15,10 +15,15 @@ import NavbarIndex from "./layout/NavbarIndex";
 
 function App() {
   const [admin, setAdmin] = useState();
-
-  console.log(admin);
+  
   useEffect(() => {
-    setAdmin('Admin');
+    const type = localStorage.getItem("type");
+    console.log(type);
+    if(type !== null){
+      setAdmin(type);
+    }else{
+      setAdmin("NoLogin");
+    }
   }, []);
 
   return (

@@ -1,7 +1,8 @@
 import React from 'react'
 
 export default function SignOut() {
-  return (
-    <div>SignOut</div>
-  )
+  localStorage.removeItem('token');
+  localStorage.removeItem('type');
+  localStorage.setItem("type","NoLogin");
+  window.location = "/";
 }

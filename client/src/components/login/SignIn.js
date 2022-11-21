@@ -25,7 +25,7 @@ export default function SignIn() {
         if (data.status === "ok") {
           alert("login sucess");
           localStorage.setItem("token", data.token);
-          localStorage.setItem("type",data.type);
+          localStorage.setItem("type", data.type);
           window.location = "/";
         } else {
           alert("login failed");

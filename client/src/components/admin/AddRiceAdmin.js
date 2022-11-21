@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import axios from 'axios';
+import axios from "axios";
 import {
   Button,
-  Card,
   Form,
-  ToggleButton,
+  ButtonGroup,
   ToggleButtonGroup,
+  ToggleButton,
 } from "react-bootstrap";
 import QRcode from "qrcode.react";
+import downloadjs from "downloadjs";
+import html2canvas from "html2canvas";
 
 var d = new Date();
 var saveCurrentDate = d.getDate() + "-" + d.getMonth() + "-" + d.getFullYear();
 var saveCurrentTime =
   d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
 var dateKey = saveCurrentDate + "," + saveCurrentTime;
-
-
 
 function genKey() {
   var text = "";
@@ -28,88 +28,79 @@ function genKey() {
 }
 
 export default function AddRiceAdmin() {
-  console.log(genKey());
-
   const [users, setUsers] = useState({});
-
-  useEffect(() => {
-    setValues({ RiceID: genKey() });
-  }, []);
+  const [typeRice, setTypeRice] = useState([]);
 
   const [values, setValues] = useState({
-    RiceCategory: "",
-    RiceDepositor: "",
-    RiceQuantity: "",
-    RiceReturn: {
-      RiceO2: [],
-      RiceMoisture: [],
-    },
-    // RiceDescription: "",
-    RiceMoth: [],
-    RiceReturn: false,
     RiceID: genKey(),
+    RiceDepositor: "",
+    RiceCategory: "",
+    RiceQuantity: "",
+    RiceReturn: false,
+    RiceTemp: [],
+  });
+  const [temp, setTemp] = useState({
+    RiceDayCheck: "dateKey",
+    RiceO2: "link",
+    RiceMoisture: "link"
   });
 
-  function postRice() {
-    axios.post('http://localhost:3030/admin/addrice', {
-      category: values.RiceCategory
-    })
-  }
 
-  console.log(values);
+
+  useEffect(() => {
+    axios.get("http://localhost:3030/type").then((response) => {
+      setTypeRice(response.data);
+    });
+    axios.get("http://localhost:3030/user").then((response) => {
+      setUsers(response.data);
+    });
+  }, []);
 
   const handleOnChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  const downloadQR = () => {
-    const canvas = document.getElementById("myqr");
-    const pngUrl = canvas
-      .toDataURL("image/png")
-      .replace("image/png", "image/octet-stream");
-    let downloadLink = document.createElement("a");
-    downloadLink.href = pngUrl;
-    downloadLink.download = "myqr.png";
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
+  const downloadQR = async () => {
+    const divQR = document.getElementById("myqr");
+    const canvas = await html2canvas(divQR);
+    const dataURL = canvas.toDataURL("image/png");
+    downloadjs(dataURL, "download.png", "image/png");
   };
 
+  console.log(values);
   return (
-    <div className="container">
+    <div className="container" style={{ width: "60%" }}>
       <br />
       <div className="row">
         <h3 className="col">Add Rice</h3>
-        {/* <h4 className='col'>{dateKey}</h4> */}
       </div>
       <hr />
 
-      <div className="container  p-5">
-        <div>
-          <h1 id="myqr">sdfsdf</h1>
-          <QRcode id="myqr" value={genKey()} size={320} includeMargin={true} />
-        </div>
-        <Button onClick={downloadQR}>โหลด</Button>
+      <div className="container  px-5 mt-3">
         <form className="was-validated">
           <div className="form-group mt-3">
             <label htmlFor="RiceCategorys">ประเภทสินค้า</label>
-            {/* <Form.Select
-            aria-label="Default select example"
-            id="RiceCategory"
-            name="RiceCategory"
-            className="form-select"
-            onChange={handleOnChange}
-            required
-          >
-            <option value="">ประเภทสินค้า</option>
-            {TypeRice.map((item, keys) => {
-              return (
-                <option name="RiceCategory" key={keys} value={item.title}>
-                  {item.title}
-                </option>
-              );
-            })}
-          </Form.Select> */}
+            <Form.Select
+              aria-label="Default select example"
+              id="RiceCategory"
+              name="RiceCategory"
+              className="form-select"
+              onChange={handleOnChange}
+              required
+            >
+              <option value="">ประเภทสินค้า</option>
+              {Object.keys(typeRice).map((item, keys) => {
+                return (
+                  <option
+                    name="RiceCategory"
+                    key={keys}
+                    value={typeRice[item].type}
+                  >
+                    {typeRice[item].type}
+                  </option>
+                );
+              })}
+            </Form.Select>
           </div>
 
           <div className="form-group mt-3">
@@ -122,17 +113,15 @@ export default function AddRiceAdmin() {
               onChange={handleOnChange}
               required
             >
-              <option value="ผู้ฝาก">ผู้ฝาก</option>
-              <option value="ผู้ฝาก1">ผู้ฝาก1</option>
-              <option value="ผู้ฝาก2">ผู้ฝาก2</option>
+              <option value="">ผู้ฝาก</option>
               {Object.keys(users).map((item, keys) => {
                 return (
                   <option
                     name="RiceDepositor"
                     key={keys}
-                    value={users[item].full_name}
+                    value={users[item].name}
                   >
-                    {users[item].full_name}
+                    {users[item].name}
                   </option>
                 );
               })}
@@ -140,44 +129,53 @@ export default function AddRiceAdmin() {
           </div>
 
           <div className="form-group mt-3">
-            <label htmlFor="ThesisDev">จำนวน</label>
-            <ToggleButtonGroup type="radio" name="RiceQuantity" defaultValue={1}>
-              <ToggleButton id="S" value={"S"} onChange={handleOnChange} >
+            <div htmlFor="ThesisDev">จำนวน</div>
+
+            <ToggleButtonGroup
+              type="radio"
+              name="RiceQuantity"
+              defaultValue={1}
+              size="lg"
+            >
+              <ToggleButton
+                className="mx-2 px-5"
+                variant="outline-danger"
+                id="S"
+                value={"S"}
+                onChange={handleOnChange}
+              >
                 S
               </ToggleButton>
-              <ToggleButton id="M" value={"M"} onChange={handleOnChange}>
+              <ToggleButton
+                className="px-5"
+                variant="outline-danger"
+                id="M"
+                value={"M"}
+                onChange={handleOnChange}
+              >
                 M
               </ToggleButton>
-              <ToggleButton id="L" value={"L"} onChange={handleOnChange}>
+              <ToggleButton
+                className="mx-2 px-5"
+                variant="outline-danger"
+                id="L"
+                value={"L"}
+                onChange={handleOnChange}
+              >
                 L
               </ToggleButton>
-              <ToggleButton id="XL" value={"XL"} onChange={handleOnChange}>
+              <ToggleButton
+                className="px-5"
+                variant="outline-danger"
+                id="XL"
+                value={"XL"}
+                onChange={handleOnChange}
+              >
                 XL
               </ToggleButton>
             </ToggleButtonGroup>
-            {/* <input
-              type="number"
-              id="RiceQuantity"
-              name="RiceQuantity"
-              className="form-control"
-              placeholder="Rice Quantity"
-              onChange={handleOnChange}
-              required
-            /> */}
           </div>
 
-          {/* <div className="form-group mt-3">
-          <label htmlFor="RiceDescription">รายละเอียด</label>
-          <textarea
-            type="text"
-            id="RiceDescription"
-            name="RiceDescription"
-            className="form-control"
-            placeholder="RiceDescription"
-            onChange={handleOnChange}
-            required
-          />
-        </div> */}
           <h5 className="mt-4">ค่าอุหณภูมิ</h5>
           <hr />
           <div className="form-group mt-3">
@@ -230,8 +228,8 @@ export default function AddRiceAdmin() {
                 // ShowImgDensity.length === 0 ||
                 // ShowImgMoth.length === 0
               }
-              type="button"
-              onClick={postRice}
+              // type="button"
+              // onClick={postRice}
             >
               Submit
             </button>
@@ -245,6 +243,24 @@ export default function AddRiceAdmin() {
           </div>
         </form>
         <br />
+      </div>
+
+      <div className="container card  text-center" style={{ width: "" }}>
+        <div id="myqr" className="container card-body">
+          <QRcode
+            className="card-img-top"
+            value={values.RiceID}
+            size={250}
+            includeMargin={true}
+          />
+          <h4 className="card-title">{values.RiceCategory}</h4>
+          <p className="card-text">ผู้ฝาก : {values.RiceDepositor}</p>
+          <p className="card-text">Size : {values.RiceQuantity}</p>
+          <div class="card-footer text-muted">{saveCurrentDate}</div>
+        </div>
+        <Button className="mx-3 my-3" onClick={downloadQR}>
+          โหลด
+        </Button>
       </div>
       <br />
     </div>

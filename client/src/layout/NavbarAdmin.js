@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Navbar, Container, Nav, Offcanvas } from "react-bootstrap";
+import SignOut from "../components/login/SignOut";
 
 
-
-/////
-// import { firebaseAuth } from "../server_firebase/firebase";
-
-const rice = require('./route')
+// const rice = require('./route')
 
 function NavbarAdmin() {
   const [login, setLogin] = useState();
@@ -43,19 +40,7 @@ function NavbarAdmin() {
                 Scan QR
               </Nav.Link>
               
-              <Nav.Link
-                className="item-nav-admin-logout"
-              // onClick={() =>
-              //   firebaseAuth
-              //     .signOut()
-              //     .then(() => {
-              //       window.location.href = "/";
-              //     })
-              //     .catch((error) => {
-              //       console.error(error);
-              //     })
-              // }
-              >
+              <Nav.Link className="item-nav-admin-logout" onClick={() =>SignOut()}>
                 <span className="no-icon">Log out</span>
               </Nav.Link>
             </Offcanvas.Body>

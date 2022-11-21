@@ -28,6 +28,8 @@ const sqlConnect = mysql.createConnection({
 
 app.use(cors());
 
+// -------------- login-----------------------------
+
 app.post("/signUp", jsonParser, function (req, res, next) {
   bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
     sqlConnect.query(
@@ -47,8 +49,7 @@ app.post("/signUp", jsonParser, function (req, res, next) {
 
 app.post("/signIn", jsonParser, function (req, res, next) {
   sqlConnect.query(
-    "SELECT * FROM `Users` WHERE phone=?",
-    [req.body.phone],
+    "SELECT * FROM `Users` WHERE phone=?",[req.body.phone],
     (err, users, fields) => {
       if (err) return res.json({ status: "error", message: err });
       else if (users.length == 0)
@@ -85,6 +86,74 @@ app.post("/authen", jsonParser, (req, res, next) => {
     res.json({ status: "Error", message: message.err });
   }
 });
+
+app.get("/user", jsonParser, (req, res, next) => {
+  sqlConnect.query("SELECT * FROM Users", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+app.get("/rice", jsonParser, (req, res) => {
+  sqlConnect.query("SELECT * FROM Rice", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+app.get("/type", jsonParser, (req, res) => {
+  sqlConnect.query("SELECT * FROM Type", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+app.post("/add-rice", jsonParser, function (req, res, next) {
+  
+  sqlConnect.query(
+    "INSERT INTO Rice (RiceID,RiceDepositor,RiceCategory,RiceQuantity,RiceReturn,RiceTemp) VALUES (?,?,?,?,?,?)",
+    [req.body.RiceID, req.body.RiceDepositor, req.body.RiceCategory, req.body.RiceQuantity, req.body.RiceReturn,null],
+    (err, result, fields) => {
+      if (err) {
+        return res.json({ status: "error", message: err });
+      } else {
+        res.json({ status: "INSERT ok" });
+      }
+    }
+  );
+});
+
+app.post("/update-temp-rice", jsonParser,(req, res) => {
+  sqlConnect.query(
+    "INSERT INTO Temp (RiceID,RiceDayCheck,RiceO2,RiceMoisture) VALUES (?,?,?,?)",
+    [req.body.RiceID,req.body.RiceDayCheck,req.body.RiceO2,req.body.RiceMoisture],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        // res.send(result);
+        res.json({ status: "UPDATE temp ok" });
+      }
+    }
+  );
+});
+
+
+app.get("",jsonParser,(req,res,next)=>{
+sqlConnect.query(
+  ""
+)
+});
+
 app.listen(PORT, () =>
   console.log("CORS-enabled web server listening on port", PORT)
 );

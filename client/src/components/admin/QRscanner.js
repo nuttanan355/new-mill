@@ -5,6 +5,8 @@ export default function QRscanner() {
     const QRCode = useRef();
   const [qrscan, setQrscan] = useState("Not Result");
 
+
+
   return (
     <div>
       <div>
@@ -26,9 +28,9 @@ export default function QRscanner() {
           </div>
        </>
         ) : (
-          <>
-            <h1>{qrscan}</h1>
-          </>
+        
+            window.location.href = `/admin/edit-rice/${qrscan}`
+          
         )}
 
         <div className="form-group">

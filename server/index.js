@@ -106,7 +106,7 @@ app.get("/rice", jsonParser, (req, res) => {
     }
   });
 });
-
+-
 app.get("/type", jsonParser, (req, res) => {
   sqlConnect.query("SELECT * FROM Type", (err, result) => {
     if (err) {

@@ -9,11 +9,12 @@ export default function QRscanner() {
 
   return (
     <div>
-      <div>
-        <span>QR Scanner</span>
+      <div className="mt-2 text-center">
+        <h2>QR Scanner</h2>
+        <hr/>
         {qrscan == "Not Result" ? (
        <>
-          <div className="container my-3" style={{ backgroundColor:'blue',height: 400, width: 400 }}>
+          <div className="container mt-2" style={{ backgroundColor:'gray',height: "100%", width: "100%" }}>
             <QrReader
               delay={300}
               onResult={(result, error) =>
@@ -33,13 +34,13 @@ export default function QRscanner() {
           
         )}
 
-        <div className="form-group">
+        {/* <div className="form-group">
           <textarea
             className="form-control"
             defaultValue={qrscan}
             value={qrscan}
           ></textarea>
-        </div>
+        </div> */}
 
       </div>
     </div>

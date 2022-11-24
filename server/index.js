@@ -116,12 +116,21 @@ app.get("/type", jsonParser, (req, res) => {
     }
   });
 });
+app.post("/rice/temp", jsonParser, (req, res) => {
+  sqlConnect.query("SELECT * FROM Temp  WHERE RiceID=?",[req.body.RiceID], (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
 
 app.post("/add-rice", jsonParser, function (req, res, next) {
   
   sqlConnect.query(
-    "INSERT INTO Rice (RiceID,RiceDepositor,RiceCategory,RiceQuantity,RiceReturn,RiceTemp) VALUES (?,?,?,?,?,?)",
-    [req.body.RiceID, req.body.RiceDepositor, req.body.RiceCategory, req.body.RiceQuantity, req.body.RiceReturn,null],
+    "INSERT INTO Rice (RiceID,RiceDepositor,RiceCategory,RiceQuantity,RiceReturn,RiceEntryDate,RiceIssueDate) VALUES (?,?,?,?,?,?,?)",
+    [req.body.RiceID, req.body.RiceDepositor, req.body.RiceCategory, req.body.RiceQuantity, req.body.RiceReturn,req.body.RiceEntryDate,null],
     (err, result, fields) => {
       if (err) {
         return res.json({ status: "error", message: err });
@@ -148,11 +157,21 @@ app.post("/update-temp-rice", jsonParser,(req, res) => {
 });
 
 
-app.get("",jsonParser,(req,res,next)=>{
-sqlConnect.query(
-  ""
-)
+app.post("/rice/update",jsonParser,(req,res,next)=>{
+  sqlConnect.query(
+    "SELECT * FROM `Rice` WHERE RiceID=?",[req.body.RiceID],(err, rice, fields) => {
+      // console.log(req.body.RiceID);
+      if (err) return res.json({ status: "error", message: err });
+      else if (rice.length == 0)
+        return res.json({ status: "error", messagee: "no users" });
+      else {
+        res.send(rice[0]);
+      }
+    }
+  );
+  
 });
+
 
 app.listen(PORT, () =>
   console.log("CORS-enabled web server listening on port", PORT)

@@ -14,8 +14,7 @@ import html2canvas from "html2canvas";
 
 var d = new Date();
 var saveCurrentDate = d.getDate() + "-" + d.getMonth() + "-" + d.getFullYear();
-var saveCurrentTime =
-  d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+var saveCurrentTime = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
 var dateKey = saveCurrentDate + "," + saveCurrentTime;
 
 function genKey() {
@@ -37,7 +36,8 @@ export default function AddRiceAdmin() {
     RiceCategory: "",
     RiceQuantity: "",
     RiceReturn: false,
-    RiceTemp: [],
+    RiceEntryDate: saveCurrentDate,
+    RiceIssueDate:''
   });
   const [temp, setTemp] = useState({
     RiceDayCheck: "dateKey",
@@ -69,7 +69,7 @@ export default function AddRiceAdmin() {
 
   console.log(values);
   return (
-    <div className="container" style={{ width: "60%" }}>
+    <div className="container">
       <br />
       <div className="row">
         <h3 className="col">Add Rice</h3>
@@ -131,48 +131,11 @@ export default function AddRiceAdmin() {
           <div className="form-group mt-3">
             <div htmlFor="ThesisDev">จำนวน</div>
 
-            <ToggleButtonGroup
-              type="radio"
-              name="RiceQuantity"
-              defaultValue={1}
-              size="lg"
-            >
-              <ToggleButton
-                className="mx-2 px-5"
-                variant="outline-danger"
-                id="S"
-                value={"S"}
-                onChange={handleOnChange}
-              >
-                S
-              </ToggleButton>
-              <ToggleButton
-                className="px-5"
-                variant="outline-danger"
-                id="M"
-                value={"M"}
-                onChange={handleOnChange}
-              >
-                M
-              </ToggleButton>
-              <ToggleButton
-                className="mx-2 px-5"
-                variant="outline-danger"
-                id="L"
-                value={"L"}
-                onChange={handleOnChange}
-              >
-                L
-              </ToggleButton>
-              <ToggleButton
-                className="px-5"
-                variant="outline-danger"
-                id="XL"
-                value={"XL"}
-                onChange={handleOnChange}
-              >
-                XL
-              </ToggleButton>
+            <ToggleButtonGroup className="col-12" type="radio" name="RiceQuantity" defaultValue={1} >
+              <ToggleButton variant="outline-danger" id="S" value={"S"} onChange={handleOnChange}>S</ToggleButton>
+              <ToggleButton variant="outline-danger" id="M" value={"M"} onChange={handleOnChange}>M</ToggleButton>
+              <ToggleButton variant="outline-danger" id="L" value={"L"} onChange={handleOnChange}>L</ToggleButton>
+              <ToggleButton variant="outline-danger" id="XL"value={"XL"}onChange={handleOnChange}>XL</ToggleButton>
             </ToggleButtonGroup>
           </div>
 
@@ -245,7 +208,7 @@ export default function AddRiceAdmin() {
         <br />
       </div>
 
-      <div className="container card  text-center" style={{ width: "" }}>
+      {/* <div className="container card  text-center" style={{ width: "" }}>
         <div id="myqr" className="container card-body">
           <QRcode
             className="card-img-top"
@@ -261,7 +224,8 @@ export default function AddRiceAdmin() {
         <Button className="mx-3 my-3" onClick={downloadQR}>
           โหลด
         </Button>
-      </div>
+      </div> */}
+
       <br />
     </div>
   );

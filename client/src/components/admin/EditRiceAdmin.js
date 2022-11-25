@@ -81,7 +81,7 @@ export default function EditRiceAdmin() {
 
       <div className="container">
         <div className="table-responsive">
-        <h5>ตรวจอุณภูมิ</h5>
+        <h5>ตารางตรวจอุณภูมิ</h5>
           <Table className="table table-striped
           table-hover	
           table-borderless

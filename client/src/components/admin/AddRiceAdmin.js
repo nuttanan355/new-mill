@@ -51,7 +51,8 @@ export default function AddRiceAdmin() {
     axios.get("http://localhost:3030/type").then((response) => {
       setTypeRice(response.data);
     });
-    axios.get("http://localhost:3030/user").then((response) => {
+    axios.post("http://localhost:3030/user",{UserType:'User'}).then((response) => {
+      console.log(response);
       setUsers(response.data);
     });
   }, []);
@@ -67,6 +68,7 @@ export default function AddRiceAdmin() {
     downloadjs(dataURL, "download.png", "image/png");
   };
 
+  console.log(users);
   console.log(values);
   return (
     <div className="container">
@@ -116,11 +118,8 @@ export default function AddRiceAdmin() {
               <option value="">ผู้ฝาก</option>
               {Object.keys(users).map((item, keys) => {
                 return (
-                  <option
-                    name="RiceDepositor"
-                    key={keys}
-                    value={users[item].name}
-                  >
+                  // users[item].type['User']?():()
+                  <option name="RiceDepositor" key={keys} value={users[item].name}>
                     {users[item].name}
                   </option>
                 );

@@ -17,13 +17,11 @@ const PORT = 3030;
 
 const sqlConnect = mysql.createConnection({
   host: "6cb.h.filess.io",
-  // host: 'localhost',
   user: "millproject_childgift",
   password: "b6864e2d23b4e4aa8fdc0c0cf88dbf7b868f55f3",
   database: "millproject_childgift",
   port: "3307",
-  localAddress:
-    "mysql://millproject_childgift:b6864e2d23b4e4aa8fdc0c0cf88dbf7b868f55f3@6cb.h.filess.io:3307/millproject_childgift",
+  localAddress:"mysql://millproject_childgift:b6864e2d23b4e4aa8fdc0c0cf88dbf7b868f55f3@6cb.h.filess.io:3307/millproject_childgift",
 });
 
 app.use(cors());
@@ -87,14 +85,28 @@ app.post("/authen", jsonParser, (req, res, next) => {
   }
 });
 
-app.get("/user", jsonParser, (req, res, next) => {
-  sqlConnect.query("SELECT * FROM Users", (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.send(result);
-    }
-  });
+app.post("/user", jsonParser, (req, res, next) => {
+  console.log(req.body.UserType);
+  if(req.body.UserType != null){
+    sqlConnect.query("SELECT * FROM Users  WHERE type=?",req.body.UserType, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        // console.log(result);
+        res.send(result);
+      }
+    });
+  }else{
+    sqlConnect.query("SELECT * FROM Users",(err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        // console.log(result);
+        res.send(result);
+      }
+    });
+  }
+
 });
 
 app.get("/rice", jsonParser, (req, res) => {
@@ -106,7 +118,7 @@ app.get("/rice", jsonParser, (req, res) => {
     }
   });
 });
--
+
 app.get("/type", jsonParser, (req, res) => {
   sqlConnect.query("SELECT * FROM Type", (err, result) => {
     if (err) {
@@ -116,6 +128,7 @@ app.get("/type", jsonParser, (req, res) => {
     }
   });
 });
+
 app.post("/rice/temp", jsonParser, (req, res) => {
   sqlConnect.query("SELECT * FROM Temp  WHERE RiceID=?",[req.body.RiceID], (err, result) => {
     if (err) {
@@ -156,7 +169,6 @@ app.post("/update-temp-rice", jsonParser,(req, res) => {
   );
 });
 
-
 app.post("/rice/update",jsonParser,(req,res,next)=>{
   sqlConnect.query(
     "SELECT * FROM `Rice` WHERE RiceID=?",[req.body.RiceID],(err, rice, fields) => {
@@ -171,7 +183,6 @@ app.post("/rice/update",jsonParser,(req,res,next)=>{
   );
   
 });
-
 
 app.listen(PORT, () =>
   console.log("CORS-enabled web server listening on port", PORT)

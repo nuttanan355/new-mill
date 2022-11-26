@@ -1,4 +1,6 @@
 var express = require("express");
+
+// import { axios } from "axios";
 var cors = require("cors");
 var app = express();
 
@@ -15,13 +17,14 @@ const tokenSignIn = "Login-new-rict-v1";
 const mysql = require("mysql");
 const PORT = 3030;
 
+
 const sqlConnect = mysql.createConnection({
   host: "6cb.h.filess.io",
   user: "millproject_childgift",
   password: "b6864e2d23b4e4aa8fdc0c0cf88dbf7b868f55f3",
   database: "millproject_childgift",
   port: "3307",
-  localAddress:"mysql://millproject_childgift:b6864e2d23b4e4aa8fdc0c0cf88dbf7b868f55f3@6cb.h.filess.io:3307/millproject_childgift",
+  localAddress: "mysql://millproject_childgift:b6864e2d23b4e4aa8fdc0c0cf88dbf7b868f55f3@6cb.h.filess.io:3307/millproject_childgift",
 });
 
 app.use(cors());
@@ -47,7 +50,7 @@ app.post("/signUp", jsonParser, function (req, res, next) {
 
 app.post("/signIn", jsonParser, function (req, res, next) {
   sqlConnect.query(
-    "SELECT * FROM `Users` WHERE phone=?",[req.body.phone],
+    "SELECT * FROM `Users` WHERE phone=?", [req.body.phone],
     (err, users, fields) => {
       if (err) return res.json({ status: "error", message: err });
       else if (users.length == 0)
@@ -87,8 +90,8 @@ app.post("/authen", jsonParser, (req, res, next) => {
 
 app.post("/user", jsonParser, (req, res, next) => {
   console.log(req.body.UserType);
-  if(req.body.UserType != null){
-    sqlConnect.query("SELECT * FROM Users  WHERE type=?",req.body.UserType, (err, result) => {
+  if (req.body.UserType != null) {
+    sqlConnect.query("SELECT * FROM Users  WHERE type=?", req.body.UserType, (err, result) => {
       if (err) {
         console.log(err);
       } else {
@@ -96,8 +99,8 @@ app.post("/user", jsonParser, (req, res, next) => {
         res.send(result);
       }
     });
-  }else{
-    sqlConnect.query("SELECT * FROM Users",(err, result) => {
+  } else {
+    sqlConnect.query("SELECT * FROM Users", (err, result) => {
       if (err) {
         console.log(err);
       } else {
@@ -119,6 +122,8 @@ app.get("/rice", jsonParser, (req, res) => {
   });
 });
 
+
+
 app.get("/type", jsonParser, (req, res) => {
   sqlConnect.query("SELECT * FROM Type", (err, result) => {
     if (err) {
@@ -130,7 +135,7 @@ app.get("/type", jsonParser, (req, res) => {
 });
 
 app.post("/rice/temp", jsonParser, (req, res) => {
-  sqlConnect.query("SELECT * FROM Temp  WHERE RiceID=?",[req.body.RiceID], (err, result) => {
+  sqlConnect.query("SELECT * FROM Temp  WHERE RiceID=?", [req.body.RiceID], (err, result) => {
     if (err) {
       console.log(err);
     } else {
@@ -140,10 +145,10 @@ app.post("/rice/temp", jsonParser, (req, res) => {
 });
 
 app.post("/add-rice", jsonParser, function (req, res, next) {
-  
+
   sqlConnect.query(
     "INSERT INTO Rice (RiceID,RiceDepositor,RiceCategory,RiceQuantity,RiceReturn,RiceEntryDate,RiceIssueDate) VALUES (?,?,?,?,?,?,?)",
-    [req.body.RiceID, req.body.RiceDepositor, req.body.RiceCategory, req.body.RiceQuantity, req.body.RiceReturn,req.body.RiceEntryDate,null],
+    [req.body.RiceID, req.body.RiceDepositor, req.body.RiceCategory, req.body.RiceQuantity, req.body.RiceReturn, req.body.RiceEntryDate, null],
     (err, result, fields) => {
       if (err) {
         return res.json({ status: "error", message: err });
@@ -154,10 +159,10 @@ app.post("/add-rice", jsonParser, function (req, res, next) {
   );
 });
 
-app.post("/update-temp-rice", jsonParser,(req, res) => {
+app.post("/update-temp-rice", jsonParser, (req, res) => {
   sqlConnect.query(
     "INSERT INTO Temp (RiceID,RiceDayCheck,RiceO2,RiceMoisture) VALUES (?,?,?,?)",
-    [req.body.RiceID,req.body.RiceDayCheck,req.body.RiceO2,req.body.RiceMoisture],
+    [req.body.RiceID, req.body.RiceDayCheck, req.body.RiceO2, req.body.RiceMoisture],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -169,9 +174,9 @@ app.post("/update-temp-rice", jsonParser,(req, res) => {
   );
 });
 
-app.post("/rice/update",jsonParser,(req,res,next)=>{
+app.post("/rice/update", jsonParser, (req, res, next) => {
   sqlConnect.query(
-    "SELECT * FROM `Rice` WHERE RiceID=?",[req.body.RiceID],(err, rice, fields) => {
+    "SELECT * FROM `Rice` WHERE RiceID=?", [req.body.RiceID], (err, rice, fields) => {
       // console.log(req.body.RiceID);
       if (err) return res.json({ status: "error", message: err });
       else if (rice.length == 0)
@@ -181,8 +186,48 @@ app.post("/rice/update",jsonParser,(req,res,next)=>{
       }
     }
   );
-  
+
 });
+
+
+/////////////////////////////////////////////////////
+app.get("/showrice", jsonParser, (req, res) => {
+  sqlConnect.query("SELECT COUNT(RiceReturn) 'AllRice',COUNT(IF(RiceReturn = 0,1,NULL)) 'onStock',COUNT(IF(RiceReturn = 1,1,NULL)) 'Returned' FROM Rice;", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+      // This result after query mysql.
+      //   {
+      //     "AllRice": 10,
+      //     "onStock": 9,
+      //     "Returned": 1
+      // }
+    }
+  });
+});
+
+app.post('/login', jsonParser, (req, res) => {
+  const phone = req.body.phone;
+  const password = req.body.password;
+
+  // console.log(phone);
+  // console.log(password);
+
+  sqlConnect.query("SELECT * FROM Users WHERE phone = ? AND password = ?",
+    [phone, password],
+    (err, result) => {
+      if (err) {
+        res.send("something wrong please check phone number or password");
+      } else {
+        res.send(result)
+
+      }
+    })
+})
+
+
+/////////////////////////////////////////////////////
 
 app.listen(PORT, () =>
   console.log("CORS-enabled web server listening on port", PORT)

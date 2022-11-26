@@ -28,6 +28,7 @@
     "react-router-dom": "^6.4.3",
     "react-scripts": "5.0.1",
     "sweetalert2": "^11.6.7",
+    "sweetalert2-react-content": "^5.0.7",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -53,5 +54,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC"
 }

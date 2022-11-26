@@ -1,5 +1,8 @@
 import React, { useState } from "react";
+import axios from 'axios';
 import "../../css/signIn.css";
+import Swal from 'sweetalert2'
+
 
 export default function SignIn() {
   const [value, setValue] = useState({
@@ -37,7 +40,20 @@ export default function SignIn() {
         console.error("Error:", error);
       });
   };
+  ////////////////////////////////
+  const [phoneReg, setPhone] = useState('');
+  const [passwordReg, setPassword] = useState('');
 
+  const login = () => {
+    axios.post('http://localhost:3030/login', {
+      phone: phoneReg,
+      password: passwordReg,
+    }).then((response) => {
+      console.log(response)
+
+    })
+  }
+  ////////////////////////////////
   return (
     <div className="limiter" style={{ background: "#EEF1FF" }}>
       <div className="container-login100">
@@ -50,7 +66,8 @@ export default function SignIn() {
             borderRadius: "15px",
           }}
         >
-          <form onSubmit={handleSubmit}>
+          {/* <form onSubmit={handleSubmit}> */}
+          <form >
             <span className="login100-form-title">Member Login</span>
             {/* <LoginGoogle variant="primary"/> */}
 
@@ -63,7 +80,10 @@ export default function SignIn() {
                 type="text"
                 name="phone"
                 placeholder="phone"
-                onChange={handleChange}
+                // onChange={handleChange}
+                onChange={(e) => {
+                  setPhone(e.target.value)
+                }}
               />
               <span className="focus-input100"></span>
               <span className="symbol-input100">
@@ -80,8 +100,12 @@ export default function SignIn() {
                 type="password"
                 name="password"
                 placeholder="Password"
-                onChange={handleChange}
+                // onChange={handleChange}
+                onChange={(e) => {
+                  setPassword(e.target.value)
+                }}
               />
+
               <span className="focus-input100"></span>
               <span className="symbol-input100">
                 <i className="fa fa-lock" aria-hidden="true"></i>
@@ -89,7 +113,7 @@ export default function SignIn() {
             </div>
 
             <div className="container-login100-form-btn">
-              <button className="login100-form-btn" type="submit">
+              <button className="login100-form-btn" onClick={login}>
                 Login
               </button>
             </div>

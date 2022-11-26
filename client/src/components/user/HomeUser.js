@@ -9,6 +9,7 @@ export default function HomeUser() {
   console.log(values);
 
   const RicesReturn = Object.keys(values).map((id) => values[id].RiceReturn);
+
   const RiceRet = (ret) => {
     return RicesReturn.filter((rets) => rets === ret);
   };
@@ -38,12 +39,25 @@ export default function HomeUser() {
       });
   }, []);
 
-  useEffect(()=>{
-  
-    axios.get('http://localhost:3030/rice').then((response)=>{
-      setValues(response.data);});
+  useEffect(() => {
+    axios.get('http://localhost:3030/rice').then((response) => {
+      setValues(response.data);
+      console.log(` ${response.data}`)
+    });
+  }, []);
 
-  },[]);
+
+  /////////////////////////////////////////
+  const [Rice, setRice] = useState([]);
+
+
+
+  useEffect(() => {
+    axios.get('http://localhost:3030/showrice').then(result => setRice(result.data));
+    console.log(Rice)
+  }, [])
+  /////////////////////////////////////////
+
 
 
   return (
@@ -58,7 +72,12 @@ export default function HomeUser() {
             }}
           >
             <Card.Body className=" text-center">
-              <Card.Title>{RiceRet(1).length} </Card.Title>
+              <Card.Title>{RiceRet(1).length}  </Card.Title>
+
+              {/* {Rice.map(item => {
+                return <Card.Title> {item.Returned} </Card.Title>
+              })} */}
+
             </Card.Body>
             <Card.Footer className="text-right">
               <Card.Text> ส่งคืนแล้ว </Card.Text>
@@ -83,7 +102,7 @@ export default function HomeUser() {
       </Row>
       <hr />
       <div className="container">
-        <UserListRice />  
+        <UserListRice />
         {/* {values.map((id,index)=>{
           return(
             <div className="card-deck" key={index}>
@@ -93,7 +112,7 @@ export default function HomeUser() {
             </div>
           );
         })} */}
-      
+
       </div>
     </div>
   );

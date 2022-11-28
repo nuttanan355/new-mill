@@ -36,7 +36,7 @@ export default function EditRiceAdmin() {
 
 
   useEffect(() => {
-    var DBRice = LinkDB + "rice/update";
+    var DBRice = LinkDB + "/rice/update";
     axios.post(DBRice, { RiceID: id }).then((response) => {
       // console.log(id);
       console.log(response.data);
@@ -44,7 +44,7 @@ export default function EditRiceAdmin() {
       setValues(response.data);
     });
 
-    var DBTemp = LinkDB + "rice/temp";
+    var DBTemp = LinkDB + "/rice/temp";
     // console.log(DBTemp)
     axios.post(DBTemp, { RiceID: id }).then((response) => {
       // // console.log(id);

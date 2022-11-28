@@ -8,7 +8,7 @@ export default function ManaageUser() {
 const [users,setUsers] = useState({});
 
 useEffect(()=>{
-var DbLink = LinkDB+"user";
+var DbLink = LinkDB+"/user";
 axios.post(DbLink).then((response) => {
   console.log(response.data);
   setUsers(response.data);

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import axios from "axios";
 import { QRCodeCanvas } from "qrcode.react";
+import { LinkDB } from "../../LinkDB";
 
 export default function ListRiceAdmin() {
   const [values, setValues] = useState({});
@@ -12,7 +13,7 @@ export default function ListRiceAdmin() {
   };
 
   useEffect(() => {
-    axios.get("http://localhost:3030/rice").then((response) => {
+    axios.get(LinkDB+"/rice").then((response) => {
       setValues(response.data);
     });
   }, []);
@@ -53,18 +54,18 @@ export default function ListRiceAdmin() {
       </Row>
       <hr />
       <div className="mt-2">
-        <div style={{ display: "flex", flexWrap: "wrap" }}>
+        <div className="row" style={{ display: "flex", flexWrap: "wrap" }}>
           {Object.keys(values).map((id, i) => {
             return (
               <div
                 key={i}
-                className="itemflex"
+                className="itemflex col"
                 style={{
                   padding: "10px",
                   maxWidth: "50%",
                   marginTop: "0px",
                   marginBottom: "0px",
-                  width: "50%",
+                  width: "30%",
                 }}
               >
                 <Card>
@@ -93,13 +94,10 @@ export default function ListRiceAdmin() {
                         <>
                           <Button
                             type="button"
-                            className="mx-1 edit-admin-btn col"
+                            className="my-1 edit-admin-btn"
                             variant="warning"
                             style={{ textAlign: "center" }}
-                            onClick={() =>
-                              (window.location.href = `/admin/edit-rice/${values[id].RiceID}`)
-                            }
-                          >
+                            onClick={() =>window.location.href = `/admin/edit-rice/${values[id].RiceID}`}>
                             ตรวจอุณภูมิ
                           </Button>
 

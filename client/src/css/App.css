@@ -52,17 +52,19 @@
 
 .search-container {
 
-  width: 200px;
   display: flex;
   flex-direction: column;
   z-index: auto;
 }
 
-.dropdown {
+span {
+  cursor: pointer;
+}
 
+.dropdown {
   display: flex;
   flex-direction: column;
-  border: 1px solid gray;
+  /* border: 1px solid gray; */
   z-index: 2;
 }
 
@@ -73,14 +75,15 @@
 input {
   font-size: medium;
   border-radius: 5px;
+
 }
 
 .dropdown-row {
   cursor: pointer;
   text-align: start;
-  margin: 2px 0;
+  /* margin: 2px 0; */
   font-size: medium;
-
+  border: 1px solid gray;
 }
 
 .dropdown-id {
@@ -90,4 +93,5 @@ input {
 
 .search-inner {
   display: flex;
+
 }

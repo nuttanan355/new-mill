@@ -24,7 +24,8 @@ function NavbarAdmin() {
   }
 
   useEffect(() => {
-    axios.get('http://localhost:3030/searchriceadmin').then((response) => {
+    axios.get('http://localhost:3030/searchriceadmin',
+    ).then((response) => {
       setResult(response.data);
       // console.log(` ${result} => result`)
     });
@@ -82,7 +83,9 @@ function NavbarAdmin() {
                       item => {
                         const searchTerm = value.toLowerCase();
                         const RiceCategory = item.RiceCategory.toLowerCase();
-                        return searchTerm && RiceCategory !== searchTerm && RiceCategory.startsWith(searchTerm)
+                        const RiceID = item.RiceID.toLowerCase();
+                        // return searchTerm && RiceCategory !== searchTerm && RiceCategory.startsWith(searchTerm) 
+                        return RiceID && searchTerm && RiceID.startsWith(searchTerm) && RiceID !== searchTerm || RiceCategory !== searchTerm && RiceCategory.startsWith(searchTerm)
                       }
                     ).map((item) => (
                       <div key={item.RiceID} className="dropdown-row" onClick={() => onSearch(item.RiceCategory)}>

@@ -214,8 +214,8 @@ app.get('/searchriceadmin', jsonParser, (req, res) => {
     } else {
       res.send(result);
     }
-  });
-});
+  })
+})
 
 app.post('/login', jsonParser, (req, res) => {
   const phone = req.body.phone;

@@ -66,8 +66,8 @@ export default function SignIn() {
             borderRadius: "15px",
           }}
         >
-          {/* <form onSubmit={handleSubmit}> */}
-          <form >
+          <form onSubmit={handleSubmit}>
+            {/* <form > */}
             <span className="login100-form-title">Member Login</span>
             {/* <LoginGoogle variant="primary"/> */}
 
@@ -80,10 +80,10 @@ export default function SignIn() {
                 type="text"
                 name="phone"
                 placeholder="phone"
-                // onChange={handleChange}
-                onChange={(e) => {
-                  setPhone(e.target.value)
-                }}
+                onChange={handleChange}
+              // onChange={(e) => {
+              //   setPhone(e.target.value)
+              // }}
               />
               <span className="focus-input100"></span>
               <span className="symbol-input100">
@@ -100,10 +100,10 @@ export default function SignIn() {
                 type="password"
                 name="password"
                 placeholder="Password"
-                // onChange={handleChange}
-                onChange={(e) => {
-                  setPassword(e.target.value)
-                }}
+                onChange={handleChange}
+              // onChange={(e) => {
+              //   setPassword(e.target.value)
+              // }}
               />
 
               <span className="focus-input100"></span>
@@ -113,7 +113,8 @@ export default function SignIn() {
             </div>
 
             <div className="container-login100-form-btn">
-              <button className="login100-form-btn" onClick={login}>
+              <button className="login100-form-btn" >
+                {/* onClick={login} */}
                 Login
               </button>
             </div>

@@ -207,10 +207,19 @@ app.get("/showrice", jsonParser, (req, res) => {
   });
 });
 
+app.get('/searchriceadmin', jsonParser, (req, res) => {
+  sqlConnect.query("SELECT RiceID,RiceCategory FROM Rice", (err, result) => {
+    if (err) {
+      res.send("search Err");
+    } else {
+      res.send(result);
+    }
+  });
+});
+
 app.post('/login', jsonParser, (req, res) => {
   const phone = req.body.phone;
   const password = req.body.password;
-
   // console.log(phone);
   // console.log(password);
 

@@ -29,7 +29,7 @@
 }
 
 
-.wait-spinner { 
+.wait-spinner {
   margin: 0;
   position: absolute;
   top: 50%;
@@ -42,7 +42,52 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+
+
+.search-container {
+
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  z-index: auto;
+}
+
+.dropdown {
+
+  display: flex;
+  flex-direction: column;
+  border: 1px solid gray;
+  z-index: 2;
+}
+
+.dropdown:empty {
+  border: none;
+}
+
+input {
+  font-size: medium;
+  border-radius: 5px;
+}
+
+.dropdown-row {
+  cursor: pointer;
+  text-align: start;
+  margin: 2px 0;
+  font-size: medium;
+
+}
+
+.dropdown-id {
+  text-align: end;
+  font-size: smaller;
+}
+
+.search-inner {
+  display: flex;
 }

@@ -85,7 +85,8 @@ function NavbarAdmin() {
                         const RiceCategory = item.RiceCategory.toLowerCase();
                         const RiceID = item.RiceID.toLowerCase();
                         // return searchTerm && RiceCategory !== searchTerm && RiceCategory.startsWith(searchTerm) 
-                        return RiceID && searchTerm && RiceID.startsWith(searchTerm) && RiceID !== searchTerm || RiceCategory !== searchTerm && RiceCategory.startsWith(searchTerm)
+                        return searchTerm && RiceID && RiceID.startsWith(searchTerm) && RiceID !== searchTerm ||
+                          searchTerm && RiceCategory && RiceCategory !== searchTerm && RiceCategory.startsWith(searchTerm)
                       }
                     ).map((item) => (
                       <div key={item.RiceID} className="dropdown-row" onClick={() => onSearch(item.RiceCategory)}>

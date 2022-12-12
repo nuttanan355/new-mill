@@ -7,6 +7,7 @@ var app = express();
 var bodyParser = require("body-parser");
 var jsonParser = bodyParser.json();
 
+const jwt_decode = require('jwt-decode');
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
@@ -61,7 +62,12 @@ app.post("/signIn", jsonParser, function (req, res, next) {
           users[0].password,
           (err, isSignIn) => {
             if (isSignIn) {
-              var token = jwt.sign({ phone: users[0].phone }, tokenSignIn);
+              var token = jwt.sign({
+                phone: users[0].phone,
+                uid: users[0].uid
+              },
+                tokenSignIn);
+              // alert(`this user id : ${users[0].uid}`)
               res.json({
                 status: "ok",
                 message: "Sign In Success",
@@ -77,6 +83,8 @@ app.post("/signIn", jsonParser, function (req, res, next) {
     }
   );
 });
+
+
 
 app.post("/authen", jsonParser, (req, res, next) => {
   try {
@@ -235,6 +243,31 @@ app.post('/login', jsonParser, (req, res) => {
     })
 })
 
+
+app.get('/decode', jsonParser, (req, res) => {
+
+  const decode = jwt_decode('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZSI6IjAwMDAxIiwidWlkIjoieGFXRjdYbWxKZHl2NzU5TiIsImlhdCI6MTY3MDQ5MDA5NX0.jhFrujR8xDl7gyVNa-gdKj0tGO7IYajj6WPDVrZIMDk')
+  res.send(decode.uid)
+  console.log('dev = ' + decode)
+
+})
+
+
+app.post('/searchriceuser', jsonParser, (req, res) => {
+  const token = req.body.uid;
+  const decode = jwt_decode(token)
+  const uid = decode.uid;
+  // res.send(decode.uid)
+  sqlConnect.query('SELECT * FROM Rice WHERE RiceDepositor LIKE ?', [uid], (err, result) => {
+    if (err) {
+      console.log(err)
+    } else {
+      res.send(result);
+    }
+  })
+
+
+})
 
 /////////////////////////////////////////////////////
 

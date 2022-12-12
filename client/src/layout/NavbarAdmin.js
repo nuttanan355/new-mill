@@ -32,8 +32,6 @@ function NavbarAdmin() {
   }, [])
 
   return (
-
-
     <div>
       <Navbar expand={false} style={{ backgroundColor: "#019267" }} >
         <Container fluid >
@@ -58,7 +56,6 @@ function NavbarAdmin() {
               <Nav.Link className="item-nav-admin" href="/">
                 Home
               </Nav.Link>
-
               <Nav.Link className="item-nav-admin" href="/admin/add-rice">
                 Add Rice
               </Nav.Link>

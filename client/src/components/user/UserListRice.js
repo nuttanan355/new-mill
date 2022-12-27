@@ -3,12 +3,13 @@ import Card from "react-bootstrap/Card";
 import axios from "axios";
 import { QRCodeCanvas } from "qrcode.react";
 import { Container, Row } from "react-bootstrap";
+import { linkDB } from "../../constant";
 
 export default function UserListRice() {
   const [values, setValues] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:3030/rice").then((response) => {
+    axios.get(linkDB+"/rice").then((response) => {
       setValues(response.data);
     });
   }, []);

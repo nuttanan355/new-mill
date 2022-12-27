@@ -1,29 +1,39 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import "../../css/signIn.css";
-
-function genKey() {
-  var text = "";
-  var possible =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  for (var i = 0; i < 16; i++)
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  return text;
-}
+import ReCAPTCHA from "react-google-recaptcha";
+import { genKey, linkDB } from "../../constant";
 
 export default function SignUp() {
+
+  var DbLink = linkDB + "/user";
+
+  const [users, setUsers] = useState({});
+
   const [value, setValue] = useState({
     uid: genKey(),
     phone: "",
     fullName: "",
     password: "",
     passwordConfirm: "",
+    memberNum:"0",
   });
+
+  useEffect(() => {
+    axios.post(DbLink, { phone: value.phone }).then((response) => {
+      if (response.data[0] != null) {
+        console.log(response.data[0].phone);
+        setUsers(response.data[0].phone);
+      }else{
+        setUsers({});
+      }   
+    });
+  }, [value.phone]);
 
   const handleChange = (e) => {
     setValue({ ...value, [e.target.name]: e.target.value });
-    console.log(value);
+    // console.log(value);
   };
 
   const handleSubmit = () => {
@@ -43,6 +53,16 @@ export default function SignUp() {
         showConfirmButton: false,
         timer: 1500,
       });
+    } else if (value.phone !== "") {
+      if (value.phone === users) {
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "เบอร์โทรนี้มีอยู่แล้วกรุณาตรวจสอบใหม่",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
     } else if (value.password === "") {
       Swal.fire({
         position: "center",
@@ -68,6 +88,8 @@ export default function SignUp() {
         timer: 1500,
       });
     } else {
+      axios.post(DbLink,{userType : "User"}).then((response)=>setValue({memberNum : response.data.length+1}))
+      console.log(value)
       try {
         const jsonData = {
           uid: value.uid,
@@ -75,42 +97,30 @@ export default function SignUp() {
           phone: value.phone,
           password: value.passwordConfirm,
           type: "User",
+          memberNum: value.memberNum  
+            
         };
         // ----------------------------axja--------------
 
-        // fetch("http://localhost:3030/signUp", {
-        //   method: "POST",
-        //   headers: { "Content-Type": "application/json" },
-        //   body: JSON.stringify(jsonData),
-        // })
-        //   .then((response) => response.json())
-        //   .then((data) => {
-        //     if (data.status === "ok") {
-        //       alert("SignUp sucess");
-        //       window.location = "/";
-        //     } else {
-        //       alert("SignUp failed");
-        //     }
-        //     // console.log("Success:", data);
-        //   })
-        //   .catch((error) => {
-        //     console.error("Error:", error);
-        //   });
-
-        axios({
+        fetch(linkDB+"/signUp", {
           method: "POST",
-          url: "http://localhost:3030/signUp",
-          data: jsonData,
-        }).then((data) => {
-          if (data.status === "ok") {
-            alert("SignUp sucess");
-            window.location = "/";
-          } else {
-            alert("SignUp failed");
-          }
-        }).catch((err)=>{
-          console.error("Error:", err);
-        });
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(jsonData),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.status === "ok") {
+              alert("SignUp sucess");
+              window.location = "/";
+            } else {
+              alert("SignUp failed");
+            }
+            // console.log("Success:", data);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+
       } catch (error) {
         console.log(error);
       }
@@ -150,6 +160,7 @@ export default function SignUp() {
             <div className="wrap-input validate-input mb-3">
               <input
                 className="input100"
+                // pattern="\d{3}[\-]\d{3}[\-]\d{4}"
                 placeholder="เบอร์โทร"
                 type="number"
                 name="phone"
@@ -188,8 +199,15 @@ export default function SignUp() {
                 <i className="fa fa-key" aria-hidden="true"></i>
               </span>
             </div>
+            {/* <div className="col-xs-1-12">
+              <ReCAPTCHA
+                name="captcha"
+                sitekey="6Lek5RcaAAAAAOI99PLPqwjK_dFooznTeFFvHniT"
+                onChange={handleChange}
+              />
+            </div> */}
 
-            <div className="d-grid">
+            <div className="d-grid mt-4">
               <button
                 type="button"
                 className="btn btn-primary"

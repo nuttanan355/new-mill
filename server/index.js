@@ -7,7 +7,7 @@ var app = express();
 var bodyParser = require("body-parser");
 var jsonParser = bodyParser.json();
 
-const jwt_decode = require('jwt-decode');
+const jwt_decode = require("jwt-decode");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
@@ -18,15 +18,24 @@ const tokenSignIn = "Login-new-rict-v1";
 const mysql = require("mysql");
 const PORT = 3030;
 
-
 const sqlConnect = mysql.createConnection({
   host: "6cb.h.filess.io",
   user: "millproject_childgift",
   password: "b6864e2d23b4e4aa8fdc0c0cf88dbf7b868f55f3",
   database: "millproject_childgift",
   port: "3307",
-  localAddress: "mysql://millproject_childgift:b6864e2d23b4e4aa8fdc0c0cf88dbf7b868f55f3@6cb.h.filess.io:3307/millproject_childgift",
+  localAddress:
+    "mysql://millproject_childgift:b6864e2d23b4e4aa8fdc0c0cf88dbf7b868f55f3@6cb.h.filess.io:3307/millproject_childgift",
 });
+
+// const sqlConnect = mysql.createConnection({
+//   host: "us-east.connect.psdb.cloud",
+//   user: "0uocyc7rjyedqjonkgee",
+//   password: "pscale_pw_nsrVevuHV9KLonqur2G4a8oTnYVGozyMS6yHLAZ4LzA",
+//   database: "new-mill",
+//   localAddress:
+//     'mysql://0uocyc7rjyedqjonkgee:pscale_pw_nsrVevuHV9KLonqur2G4a8oTnYVGozyMS6yHLAZ4LzA@us-east.connect.psdb.cloud/new-mill?ssl={"rejectUnauthorized":true}',
+// });
 
 app.use(cors());
 
@@ -35,8 +44,8 @@ app.use(cors());
 app.post("/signUp", jsonParser, function (req, res, next) {
   bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
     sqlConnect.query(
-      "INSERT INTO Users (uid,name,phone,password,type) VALUES (?,?,?,?,?)",
-      [req.body.uid, req.body.name, req.body.phone, hash, req.body.type],
+      "INSERT INTO Users (uid,name,phone,password,type,memberNum) VALUES (?,?,?,?,?,?)",
+      [req.body.uid, req.body.name, req.body.phone, hash, req.body.type,req.body.memberNum],
       (err, result, fields) => {
         if (err) {
           return res.json({ status: "error", message: err });
@@ -51,7 +60,8 @@ app.post("/signUp", jsonParser, function (req, res, next) {
 
 app.post("/signIn", jsonParser, function (req, res, next) {
   sqlConnect.query(
-    "SELECT * FROM `Users` WHERE phone=?", [req.body.phone],
+    "SELECT * FROM `Users` WHERE phone=?",
+    [req.body.phone],
     (err, users, fields) => {
       if (err) return res.json({ status: "error", message: err });
       else if (users.length == 0)
@@ -62,11 +72,13 @@ app.post("/signIn", jsonParser, function (req, res, next) {
           users[0].password,
           (err, isSignIn) => {
             if (isSignIn) {
-              var token = jwt.sign({
-                phone: users[0].phone,
-                uid: users[0].uid
-              },
-                tokenSignIn);
+              var token = jwt.sign(
+                {
+                  phone: users[0].phone,
+                  uid: users[0].uid,
+                },
+                tokenSignIn
+              );
               // alert(`this user id : ${users[0].uid}`)
               res.json({
                 status: "ok",
@@ -84,8 +96,6 @@ app.post("/signIn", jsonParser, function (req, res, next) {
   );
 });
 
-
-
 app.post("/authen", jsonParser, (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
@@ -97,27 +107,40 @@ app.post("/authen", jsonParser, (req, res, next) => {
 });
 
 app.post("/user", jsonParser, (req, res, next) => {
-  console.log(req.body.UserType);
-  if (req.body.UserType != null) {
-    sqlConnect.query("SELECT * FROM Users  WHERE type=?", req.body.UserType, (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        // console.log(result);
-        res.send(result);
+  if (req.body.userType != null) {
+    sqlConnect.query(
+      "SELECT * FROM Users  WHERE type=?",
+      req.body.userType,
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          res.send(result);
+        }
       }
-    });
-  } else {
+    );
+  }else if(req.body.phone != null){
+    sqlConnect.query(
+      "SELECT * FROM Users  WHERE phone=?",
+      req.body.phone,
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          res.send(result);
+        }
+      }
+    );
+  } 
+  else {
     sqlConnect.query("SELECT * FROM Users", (err, result) => {
       if (err) {
         console.log(err);
       } else {
-        // console.log(result);
         res.send(result);
       }
     });
   }
-
 });
 
 app.get("/rice", jsonParser, (req, res) => {
@@ -130,8 +153,6 @@ app.get("/rice", jsonParser, (req, res) => {
   });
 });
 
-
-
 app.get("/type", jsonParser, (req, res) => {
   sqlConnect.query("SELECT * FROM Type", (err, result) => {
     if (err) {
@@ -143,20 +164,31 @@ app.get("/type", jsonParser, (req, res) => {
 });
 
 app.post("/rice/temp", jsonParser, (req, res) => {
-  sqlConnect.query("SELECT * FROM Temp  WHERE RiceID=?", [req.body.RiceID], (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.send(result);
+  sqlConnect.query(
+    "SELECT * FROM Temp  WHERE RiceID=?",
+    [req.body.RiceID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
     }
-  });
+  );
 });
 
 app.post("/add-rice", jsonParser, function (req, res, next) {
-
   sqlConnect.query(
     "INSERT INTO Rice (RiceID,RiceDepositor,RiceCategory,RiceQuantity,RiceReturn,RiceEntryDate,RiceIssueDate) VALUES (?,?,?,?,?,?,?)",
-    [req.body.RiceID, req.body.RiceDepositor, req.body.RiceCategory, req.body.RiceQuantity, req.body.RiceReturn, req.body.RiceEntryDate, null],
+    [
+      req.body.RiceID,
+      req.body.RiceDepositor,
+      req.body.RiceCategory,
+      req.body.RiceQuantity,
+      req.body.RiceReturn,
+      req.body.RiceEntryDate,
+      null,
+    ],
     (err, result, fields) => {
       if (err) {
         return res.json({ status: "error", message: err });
@@ -170,7 +202,12 @@ app.post("/add-rice", jsonParser, function (req, res, next) {
 app.post("/update-temp-rice", jsonParser, (req, res) => {
   sqlConnect.query(
     "INSERT INTO Temp (RiceID,RiceDayCheck,RiceO2,RiceMoisture) VALUES (?,?,?,?)",
-    [req.body.RiceID, req.body.RiceDayCheck, req.body.RiceO2, req.body.RiceMoisture],
+    [
+      req.body.RiceID,
+      req.body.RiceDayCheck,
+      req.body.RiceO2,
+      req.body.RiceMoisture,
+    ],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -184,7 +221,9 @@ app.post("/update-temp-rice", jsonParser, (req, res) => {
 
 app.post("/rice/update", jsonParser, (req, res, next) => {
   sqlConnect.query(
-    "SELECT * FROM `Rice` WHERE RiceID=?", [req.body.RiceID], (err, rice, fields) => {
+    "SELECT * FROM `Rice` WHERE RiceID=?",
+    [req.body.RiceID],
+    (err, rice, fields) => {
       // console.log(req.body.RiceID);
       if (err) return res.json({ status: "error", message: err });
       else if (rice.length == 0)
@@ -194,80 +233,92 @@ app.post("/rice/update", jsonParser, (req, res, next) => {
       }
     }
   );
+});
 
+app.get("/search/user-admin", jsonParser, (req, res) => {
+  sqlConnect.query(
+    "SELECT uid,phone,memberNum,name FROM Users WHERE type='User'",
+    (err, result) => {
+      if (err) {
+        res.send("search Err");
+      } else {
+        res.send(result);
+      }
+    }
+  );
 });
 
 
 /////////////////////////////////////////////////////
 app.get("/showrice", jsonParser, (req, res) => {
-  sqlConnect.query("SELECT COUNT(RiceReturn) 'AllRice',COUNT(IF(RiceReturn = 0,1,NULL)) 'onStock',COUNT(IF(RiceReturn = 1,1,NULL)) 'Returned' FROM Rice;", (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.send(result);
-      // This result after query mysql.
-      //   {
-      //     "AllRice": 10,
-      //     "onStock": 9,
-      //     "Returned": 1
-      // }
+  sqlConnect.query(
+    "SELECT COUNT(RiceReturn) 'AllRice',COUNT(IF(RiceReturn = 0,1,NULL)) 'onStock',COUNT(IF(RiceReturn = 1,1,NULL)) 'Returned' FROM Rice;",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+        // This result after query mysql.
+        //   {
+        //     "AllRice": 10,
+        //     "onStock": 9,
+        //     "Returned": 1
+        // }
+      }
     }
-  });
+  );
 });
 
-app.get('/searchriceadmin', jsonParser, (req, res) => {
+app.get("/searchriceadmin", jsonParser, (req, res) => {
   sqlConnect.query("SELECT RiceID,RiceCategory FROM Rice", (err, result) => {
     if (err) {
       res.send("search Err");
     } else {
       res.send(result);
     }
-  })
-})
+  });
+});
 
-app.post('/login', jsonParser, (req, res) => {
+app.post("/login", jsonParser, (req, res) => {
   const phone = req.body.phone;
   const password = req.body.password;
-  // console.log(phone);
-  // console.log(password);
-
-  sqlConnect.query("SELECT * FROM Users WHERE phone = ? AND password = ?",
+  sqlConnect.query(
+    "SELECT * FROM Users WHERE phone = ? AND password = ?",
     [phone, password],
     (err, result) => {
       if (err) {
         res.send("something wrong please check phone number or password");
       } else {
-        res.send(result)
-
+        res.send(result);
       }
-    })
-})
+    }
+  );
+});
 
+// app.get('/decode', jsonParser, (req, res) => {
+//   const decode = jwt_decode('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZSI6IjAwMDAxIiwidWlkIjoieGFXRjdYbWxKZHl2NzU5TiIsImlhdCI6MTY3MDQ5MDA5NX0.jhFrujR8xDl7gyVNa-gdKj0tGO7IYajj6WPDVrZIMDk')
+//   res.send(decode.uid)
+//   console.log('dev = ' + decode)
 
-app.get('/decode', jsonParser, (req, res) => {
+// })
 
-  const decode = jwt_decode('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZSI6IjAwMDAxIiwidWlkIjoieGFXRjdYbWxKZHl2NzU5TiIsImlhdCI6MTY3MDQ5MDA5NX0.jhFrujR8xDl7gyVNa-gdKj0tGO7IYajj6WPDVrZIMDk')
-  res.send(decode.uid)
-  console.log('dev = ' + decode)
-
-})
-
-
-app.post('/searchriceuser', jsonParser, (req, res) => {
+app.post("/searchriceuser", jsonParser, (req, res) => {
   const token = req.body.uid;
-  const decode = jwt_decode(token)
+  const decode = jwt_decode(token);
   const uid = decode.uid;
   // res.send(decode.uid)
-  sqlConnect.query('SELECT * FROM Rice WHERE RiceDepositor LIKE ?', [uid], (err, result) => {
-    if (err) {
-      console.log(err)
-    } else {
-      res.send(result);
+  sqlConnect.query(
+    "SELECT * FROM Rice WHERE RiceDepositor LIKE ?",
+    [uid],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
     }
-  })
-
-
-})
+  );
+});
 
 /////////////////////////////////////////////////////
 

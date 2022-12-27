@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from 'axios';
 import "../../css/signIn.css";
 import Swal from 'sweetalert2'
+import { linkDB } from "../../constant";
 
 
 export default function SignIn() {
@@ -18,7 +19,7 @@ export default function SignIn() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch("http://localhost:3030/signIn", {
+    fetch(linkDB+"/signIn", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(value),
@@ -45,7 +46,7 @@ export default function SignIn() {
   const [passwordReg, setPassword] = useState('');
 
   const login = () => {
-    axios.post('http://localhost:3030/login', {
+    axios.post(linkDB+'/login', {
       phone: phoneReg,
       password: passwordReg,
     }).then((response) => {

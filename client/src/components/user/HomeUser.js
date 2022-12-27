@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Row, Col, Card } from "react-bootstrap";
 import axios from "axios";
 import UserListRice from "./UserListRice";
+import { linkDB } from "../../constant";
 
 export default function HomeUser() {
   const [values, setValues] = useState([]);
@@ -16,36 +17,39 @@ export default function HomeUser() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch("http://localhost:3030/authen", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status === "ok") {
-          // alert("token sucess");
-          // localStorage.setItem("token", data.token);
-          // window.location = "/";
-        } else {
-          alert("token failed");
-          localStorage.removeItem('token');
-        }
+    if(token != null){
+      fetch(linkDB+"/authen", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
       })
-      .catch((error) => {
-        console.error("Error:", error);
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === "ok") {
+            // alert("token sucess");
+            // localStorage.setItem("token", data.token);
+            // window.location = "/";
+          } else {
+            alert("token failed");
+            localStorage.removeItem('token');
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+   
+
+
+
+      axios.get(linkDB+'/rice').then((response) => {
+        setValues(response.data);
+        // console.log(` ${response.data}`)
       });
-  }, []);
 
-  useEffect(() => {
-    axios.get('http://localhost:3030/rice').then((response) => {
-      setValues(response.data);
-      console.log(` ${response.data}`)
-    });
   }, []);
-
 
   /////////////////////////////////////////
   const [Rice, setRice] = useState([]);
@@ -53,7 +57,7 @@ export default function HomeUser() {
 
 
   useEffect(() => {
-    axios.get('http://localhost:3030/showrice').then(result => setRice(result.data));
+    axios.get(linkDB+'/showrice').then(result => setRice(result.data));
     console.log(Rice)
   }, [])
   /////////////////////////////////////////

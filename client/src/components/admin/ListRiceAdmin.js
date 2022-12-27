@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import axios from "axios";
 import { QRCodeCanvas } from "qrcode.react";
-import { LinkDB } from "../../LinkDB";
+import { linkDB } from "../../constant";
 
 export default function ListRiceAdmin() {
   const [values, setValues] = useState({});
@@ -13,7 +13,7 @@ export default function ListRiceAdmin() {
   };
 
   useEffect(() => {
-    axios.get(LinkDB+"/rice").then((response) => {
+    axios.get(linkDB+"/rice").then((response) => {
       setValues(response.data);
     });
   }, []);

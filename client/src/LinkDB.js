@@ -1,1 +1,0 @@
-export var LinkDB = 'http://localhost:3030'

@@ -18,7 +18,7 @@ function App() {
 
   useEffect(() => {
     const type = localStorage.getItem("type");
-    console.log(type);
+    // console.log(type);
     if(type !== null){
       setAdmin(type);
     }else{

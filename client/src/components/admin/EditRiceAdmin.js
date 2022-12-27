@@ -1,24 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { LinkDB } from "../../LinkDB";
+import { linkDB } from "../../constant.js";
 import { QRCodeCanvas } from "qrcode.react";
 import { Table } from "react-bootstrap";
 
-var d = new Date();
-var saveCurrentDate = d.getDate() + "-" + d.getMonth() + "-" + d.getFullYear();
-var saveCurrentTime =
-  d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
-var dateKey = saveCurrentDate + "," + saveCurrentTime;
-
-function genKey() {
-  var text = "";
-  var possible =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  for (var i = 0; i < 16; i++)
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  return text;
-}
 
 export default function EditRiceAdmin() {
   const { id } = useParams();
@@ -36,7 +22,7 @@ export default function EditRiceAdmin() {
 
 
   useEffect(() => {
-    var DBRice = LinkDB + "/rice/update";
+    var DBRice = linkDB + "/rice/update";
     axios.post(DBRice, { RiceID: id }).then((response) => {
       // console.log(id);
       console.log(response.data);
@@ -44,7 +30,7 @@ export default function EditRiceAdmin() {
       setValues(response.data);
     });
 
-    var DBTemp = LinkDB + "/rice/temp";
+    var DBTemp = linkDB + "/rice/temp";
     // console.log(DBTemp)
     axios.post(DBTemp, { RiceID: id }).then((response) => {
       // // console.log(id);

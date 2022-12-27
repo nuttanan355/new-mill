@@ -11,20 +11,7 @@ import {
 import QRcode from "qrcode.react";
 import downloadjs from "downloadjs";
 import html2canvas from "html2canvas";
-
-var d = new Date();
-var saveCurrentDate = d.getDate() + "-" + d.getMonth() + "-" + d.getFullYear();
-var saveCurrentTime = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
-var dateKey = saveCurrentDate + "," + saveCurrentTime;
-
-function genKey() {
-  var text = "";
-  var possible =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  for (var i = 0; i < 16; i++)
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  return text;
-}
+import { genKey, linkDB, saveCurrentDate } from "../../constant";
 
 export default function AddRiceAdmin() {
   const [users, setUsers] = useState({});
@@ -48,10 +35,11 @@ export default function AddRiceAdmin() {
 
 
   useEffect(() => {
-    axios.get("http://localhost:3030/type").then((response) => {
+    // var DbLink = linkDB + "/user";
+    axios.get(linkDB+"/type").then((response) => {
       setTypeRice(response.data);
     });
-    axios.post("http://localhost:3030/user",{UserType:'User'}).then((response) => {
+    axios.post(linkDB+"/user",{UserType:'User'}).then((response) => {
       console.log(response);
       setUsers(response.data);
     });
@@ -207,7 +195,7 @@ export default function AddRiceAdmin() {
         <br />
       </div>
 
-      {/* <div className="container card  text-center" style={{ width: "" }}>
+      <div className="container card  text-center" style={{ width: "" }}>
         <div id="myqr" className="container card-body">
           <QRcode
             className="card-img-top"
@@ -218,12 +206,13 @@ export default function AddRiceAdmin() {
           <h4 className="card-title">{values.RiceCategory}</h4>
           <p className="card-text">ผู้ฝาก : {values.RiceDepositor}</p>
           <p className="card-text">Size : {values.RiceQuantity}</p>
-          <div class="card-footer text-muted">{saveCurrentDate}</div>
+          <div className="card-footer text-muted">{saveCurrentDate}</div>
         </div>
         <Button className="mx-3 my-3" onClick={downloadQR}>
           โหลด
         </Button>
-      </div> */}
+      </div>
+      
 
       <br />
     </div>

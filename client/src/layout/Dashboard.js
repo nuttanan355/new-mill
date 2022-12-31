@@ -1,12 +1,12 @@
 import React, { useEffect, useState} from "react";
 import { Container } from "react-bootstrap";
 import axios from "axios";
-import { linkDB } from "../../constant";
+import { linkDB } from "../constant";
 
 
 
 
-export default function Dashbord() {
+export default function Dashboard() {
   
   useEffect(() => {
     axios.get(linkDB+"/rice").then((response) => {

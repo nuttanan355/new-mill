@@ -9,3 +9,35 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.div-btn:hover{
+  /* background-color: mistyrose; */
+  box-shadow: 10px 5px 20px #8888;
+  transition:300ms;
+  /* transform: scale(1.2); */
+}
+.div-btn{
+  /* background-color: mistyrose; */
+  transition:300ms
+}
+.btn-scan:hover{
+  transform: scale(1.2);
+  transition:300ms
+
+}
+.btn-scan{
+  /* transform: scale(1.2); */
+  transition:300ms
+}
+.item-nav{
+  font-size: 1.3rem;
+
+}
+.item-nav:hover{
+  margin-left: 10px;
+}
+.item-nav-admin{
+  font-size: 1.3rem;
+}
+.item-nav-admin:hover{
+  margin-left: 10px;
+}

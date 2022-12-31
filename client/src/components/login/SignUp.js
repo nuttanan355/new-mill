@@ -4,9 +4,9 @@ import Swal from "sweetalert2";
 import "../../css/signIn.css";
 import ReCAPTCHA from "react-google-recaptcha";
 import { genKey, linkDB } from "../../constant";
+// import { response } from "express";
 
 export default function SignUp() {
-
   var DbLink = linkDB + "/user";
 
   const [users, setUsers] = useState({});
@@ -17,24 +17,31 @@ export default function SignUp() {
     fullName: "",
     password: "",
     passwordConfirm: "",
-    memberNum:"0",
+    memberNums: 0,
   });
 
   useEffect(() => {
     axios.post(DbLink, { phone: value.phone }).then((response) => {
       if (response.data[0] != null) {
-        console.log(response.data[0].phone);
         setUsers(response.data[0].phone);
-      }else{
+        // console.log(response.data);
+      } else {
         setUsers({});
-      }   
+      }
     });
   }, [value.phone]);
 
+  useEffect(() => {
+    axios.post(DbLink, { userType: "User" }).then((response) => {
+      setValue({ ...value, memberNums: response.data.length + 1 });
+    });
+  }, []);
+
   const handleChange = (e) => {
     setValue({ ...value, [e.target.name]: e.target.value });
-    // console.log(value);
+    console.log(value);
   };
+  console.log(value.memberNums);
 
   const handleSubmit = () => {
     if (value.fullName === "") {
@@ -53,16 +60,14 @@ export default function SignUp() {
         showConfirmButton: false,
         timer: 1500,
       });
-    } else if (value.phone !== "") {
-      if (value.phone === users) {
-        Swal.fire({
-          position: "center",
-          icon: "error",
-          title: "เบอร์โทรนี้มีอยู่แล้วกรุณาตรวจสอบใหม่",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      }
+    } else if (value.phone === users) {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "เบอร์โทรนี้มีอยู่แล้วกรุณาตรวจสอบใหม่",
+        showConfirmButton: false,
+        timer: 1500,
+      });
     } else if (value.password === "") {
       Swal.fire({
         position: "center",
@@ -88,8 +93,6 @@ export default function SignUp() {
         timer: 1500,
       });
     } else {
-      axios.post(DbLink,{userType : "User"}).then((response)=>setValue({memberNum : response.data.length+1}))
-      console.log(value)
       try {
         const jsonData = {
           uid: value.uid,
@@ -97,19 +100,19 @@ export default function SignUp() {
           phone: value.phone,
           password: value.passwordConfirm,
           type: "User",
-          memberNum: value.memberNum  
-            
+          memberNum: value.memberNums,
         };
+
         // ----------------------------axja--------------
 
-        fetch(linkDB+"/signUp", {
+        fetch(linkDB + "/signUp", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(jsonData),
         })
           .then((response) => response.json())
           .then((data) => {
-            if (data.status === "ok") {
+            if (data.status === "sucess") {
               alert("SignUp sucess");
               window.location = "/";
             } else {
@@ -120,6 +123,22 @@ export default function SignUp() {
           .catch((error) => {
             console.error("Error:", error);
           });
+
+      //   axios
+      //     .post(linkDB + "/signUp", jsonData)
+      //     .then((response) => response.json())
+      //     .then((data) => {
+      //       console.log(data);
+      //       if (data.status === "sucess") {
+      //         alert("SignUp sucess");
+      //         window.location = "/";
+      //       } else {
+      //         alert("SignUp failed");
+      //       }
+      //     })
+      //     .catch((err) => {
+      //       console.error("Error:", err);
+      //     });
 
       } catch (error) {
         console.log(error);

@@ -24,7 +24,7 @@ export const RouterAdmin = [
     element: <HomeAdmin />,
   },
   {
-    path: "/admin/add-rice",
+    path: "/admin/add-rice/:id",
     element: <AddRiceAdmin />,
   },
   {

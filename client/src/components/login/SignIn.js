@@ -27,7 +27,23 @@ export default function SignIn() {
       .then((response) => response.json())
       .then((data) => {
         if (data.status === "ok") {
-          alert("login sucess");
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+          })
+          
+          Toast.fire({
+            icon: 'success',
+            title: 'SignIn in successfully'
+          })
+          // alert("login sucess");
           localStorage.setItem("token", data.token);
           localStorage.setItem("type", data.type);
           window.location = "/";
@@ -42,18 +58,18 @@ export default function SignIn() {
       });
   };
   ////////////////////////////////
-  const [phoneReg, setPhone] = useState('');
-  const [passwordReg, setPassword] = useState('');
+  // const [phoneReg, setPhone] = useState('');
+  // const [passwordReg, setPassword] = useState('');
 
-  const login = () => {
-    axios.post(linkDB+'/login', {
-      phone: phoneReg,
-      password: passwordReg,
-    }).then((response) => {
-      console.log(response)
+  // const login = () => {
+  //   axios.post(linkDB+'/login', {
+  //     phone: phoneReg,
+  //     password: passwordReg,
+  //   }).then((response) => {
+  //     console.log(response)
 
-    })
-  }
+  //   })
+  // }
   ////////////////////////////////
   return (
     <div className="limiter" style={{ background: "#EEF1FF" }}>

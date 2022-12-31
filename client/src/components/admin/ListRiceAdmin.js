@@ -3,9 +3,11 @@ import { Button, Card, Col, Row } from "react-bootstrap";
 import axios from "axios";
 import { QRCodeCanvas } from "qrcode.react";
 import { linkDB } from "../../constant";
+import * as IconBs from "react-icons/bs";
 
 export default function ListRiceAdmin() {
   const [values, setValues] = useState({});
+  const [result, setResult] = useState([]);
 
   const RicesReturn = Object.keys(values).map((id) => values[id].RiceReturn);
   const RiceRet = (ret) => {
@@ -13,9 +15,14 @@ export default function ListRiceAdmin() {
   };
 
   useEffect(() => {
-    axios.get(linkDB+"/rice").then((response) => {
+    axios.get(linkDB + "/rice").then((response) => {
       setValues(response.data);
     });
+
+    axios.get(linkDB + "/search/user-admin").then((response) => {
+      setResult(response.data);
+    });
+
   }, []);
 
   return (
@@ -29,7 +36,7 @@ export default function ListRiceAdmin() {
             }}
           >
             <Card.Body className=" text-center">
-              <Card.Title>{RiceRet(true).length} </Card.Title>
+              <Card.Title>{RiceRet('2').length} </Card.Title>
             </Card.Body>
             <Card.Footer className="text-right">
               <Card.Text> ส่งคืนแล้ว </Card.Text>
@@ -44,7 +51,7 @@ export default function ListRiceAdmin() {
             }}
           >
             <Card.Body className=" text-center">
-              <Card.Title>{RiceRet(false).length} </Card.Title>
+              <Card.Title>{RiceRet('0').length} </Card.Title>
             </Card.Body>
             <Card.Footer className="text-right">
               <Card.Text> ยังไม่ส่งคืน </Card.Text>
@@ -53,22 +60,21 @@ export default function ListRiceAdmin() {
         </Col>
       </Row>
       <hr />
-      <div className="mt-2">
-        <div className="row" style={{ display: "flex", flexWrap: "wrap" }}>
+      <div className="mb-5 mt-2">
+        <div className="row g-4" style={{ display: "flex", flexWrap: "wrap" }}>
           {Object.keys(values).map((id, i) => {
             return (
-              <div
-                key={i}
-                className="itemflex col"
-                style={{
-                  padding: "10px",
-                  maxWidth: "50%",
-                  marginTop: "0px",
-                  marginBottom: "0px",
-                  width: "30%",
-                }}
-              >
-                <Card>
+              <div key={i} className="itemflex col-sm-3">
+                <Card
+                  className="div-btn"
+                  variant="warning"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="ตรวจรายการข้าวนี้"
+                  onClick={() =>
+                    (window.location.href = `/admin/edit-rice/${values[id].RiceID}`)
+                  }
+                >
                   <Card.Header
                     style={{
                       whiteSpace: "nowrap",
@@ -76,7 +82,22 @@ export default function ListRiceAdmin() {
                       overflow: "hidden",
                     }}
                   >
-                    {values[id].RiceCategory}
+
+                    <div className="row justify-content-center align-items-center g-2">
+                      <div className="col-9">{values[id].RiceCategory}</div>
+                      <Button className=" delete-admin-btn col mx-1"
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="ลบรายการข้าวนี้"
+                        variant="outline-danger"
+                  style={{border:"1px solid lightgray"}}
+
+                        // onClick={() => onDelete(id)}>
+                      >
+                        <IconBs.BsFillTrashFill />
+                      </Button>
+                    </div>
+                   
                   </Card.Header>
                   <Card.Body>
                     <Row>
@@ -87,42 +108,57 @@ export default function ListRiceAdmin() {
                         <QRCodeCanvas value={values[id].RiceID} />
                       </div>
                     </Row>
-                    <Row>
-                      {values[id].RiceReturn ? (
-                        <div></div>
+                    {/* <Row className="row g-2 text-center"> */}
+                      {/* {values[id].RiceReturn ? (
+                        <></>
                       ) : (
                         <>
                           <Button
                             type="button"
-                            className="my-1 edit-admin-btn"
-                            variant="warning"
-                            style={{ textAlign: "center" }}
-                            onClick={() =>window.location.href = `/admin/edit-rice/${values[id].RiceID}`}>
-                            ตรวจอุณภูมิ
+                           >
+                            <IconBs.BsStack />
                           </Button>
 
                           <Button
                             type="button"
-                            className="mx-1 edit-admin-btn col"
+                            className="edit-admin-btn col mx-1"
                             variant="success"
-                            style={{ textAlign: "center" }}
+                            data-toggle="tooltip" 
+                            data-placement="bottom" 
+                            title="ขอล่งคืนรายการข้าวนี้"
                             // onClick={() => onRiceReturn(id)}
                           >
-                            ส่งคืนข้าว
+                            <IconBs.BsSaveFill />
                           </Button>
                         </>
-                      )}
+                      )} */}
 
-                      <Button
+                      {/* <Button
                         type="button"
-                        style={{ textAlign: "center" }}
-                        className="mx-1 delete-admin-btn col"
+                        className=" delete-admin-btn col mx-1"
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="ลบรายการข้าวนี้"
                         variant="danger"
                         // onClick={() => onDelete(id)}>
                       >
-                        ลบ
-                      </Button>
-                    </Row>
+                        <IconBs.BsFillTrashFill />
+                      </Button> */}
+                    {/* </Row> */}
+
+                    <div> {
+                    result.filter((item)=>{
+                      const uid = item.uid.toLowerCase();
+                      const uidRiDep =values[id].RiceDepositor.toLowerCase();
+                      return uid.startsWith(uidRiDep)
+                    }) .map((item, keys) => (
+                      <Card.Text key={keys}>
+                          ผู้ฝาก : {item.name}
+                      </Card.Text>
+                    ))
+                    }</div>
+
+
                   </Card.Body>
                 </Card>
               </div>

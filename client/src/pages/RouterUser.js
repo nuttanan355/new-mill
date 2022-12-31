@@ -5,6 +5,7 @@ import HomeUser from "../components/user/HomeUser";
 import SignIn from "../components/login/SignIn";
 import SignUp from "../components/login/SignUp";
 import MyRice from "../components/user/MyRice";
+import ViewRice from "../components/user/ViewRice";
 
 export const RouterUser = [
   {
@@ -26,6 +27,10 @@ export const RouterUser = [
   {
     path: "/user/sign-in",
     element: <SignIn />,
+  },
+  {
+    path: "/user/view-rice/:id",
+    element: <ViewRice />,
   },
 
 ];

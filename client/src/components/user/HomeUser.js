@@ -7,6 +7,8 @@ import { linkDB } from "../../constant";
 export default function HomeUser() {
   const [values, setValues] = useState([]);
 
+
+
   console.log(values);
 
   const RicesReturn = Object.keys(values).map((id) => values[id].RiceReturn);
@@ -16,7 +18,9 @@ export default function HomeUser() {
   };
 
   useEffect(() => {
+
     const token = localStorage.getItem("token");
+    
     if(token != null){
       fetch(linkDB+"/authen", {
         method: "POST",
@@ -29,7 +33,7 @@ export default function HomeUser() {
         .then((data) => {
           if (data.status === "ok") {
             // alert("token sucess");
-            // localStorage.setItem("token", data.token);
+            localStorage.setItem("token", data.message);
             // window.location = "/";
           } else {
             alert("token failed");
@@ -40,27 +44,15 @@ export default function HomeUser() {
           console.error("Error:", error);
         });
     }
+
    
-
-
-
       axios.get(linkDB+'/rice').then((response) => {
         setValues(response.data);
         // console.log(` ${response.data}`)
       });
+ 
 
   }, []);
-
-  /////////////////////////////////////////
-  const [Rice, setRice] = useState([]);
-
-
-
-  useEffect(() => {
-    axios.get(linkDB+'/showrice').then(result => setRice(result.data));
-    console.log(Rice)
-  }, [])
-  /////////////////////////////////////////
 
 
 
@@ -76,7 +68,7 @@ export default function HomeUser() {
             }}
           >
             <Card.Body className=" text-center">
-              <Card.Title>{RiceRet(1).length}  </Card.Title>
+              <Card.Title>{RiceRet('2').length}  </Card.Title>
 
               {/* {Rice.map(item => {
                 return <Card.Title> {item.Returned} </Card.Title>
@@ -96,7 +88,7 @@ export default function HomeUser() {
             }}
           >
             <Card.Body className=" text-center">
-              <Card.Title>{RiceRet(0).length} </Card.Title>
+              <Card.Title>{RiceRet('0').length} </Card.Title>
             </Card.Body>
             <Card.Footer className="text-right">
               <Card.Text> ยังไม่ส่งคืน </Card.Text>

@@ -29,6 +29,7 @@ function App() {
 
   return (
     <div>
+    {/* <div style={{backgroundColor:"#FFFBE9"}}> */}
       {admin === "Admin" ? (
         <>
           <NavbarAdmin />
@@ -37,6 +38,8 @@ function App() {
               return <Route index path={path} element={element} key={key} />;
             })}
           </Routes>
+          {/* <Footer /> */}
+
         </>
       ) : admin === "User" ? (
         <>
@@ -46,7 +49,7 @@ function App() {
               return <Route index path={path} element={element} key={key} />;
             })}
           </Routes>
-          <Footer />
+          {/* <Footer /> */}
         </>
       ) : admin === "NoLogin" ? (
         <>
@@ -56,7 +59,7 @@ function App() {
               return <Route index path={path} element={element} key={key} />;
             })}
           </Routes>
-          <Footer />
+          {/* <Footer /> */}
         </>
       ) : (
         <div className="wait-spinner">

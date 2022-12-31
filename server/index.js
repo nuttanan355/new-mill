@@ -16,9 +16,11 @@ const tokenSignIn = "Login-new-rict-v1";
 // var token = jwt.sign({ foo: 'bar' }, 'shhhhh');
 
 const mysql = require("mysql");
+const multer = require("multer");
 const PORT = 3030;
 
 const sqlConnect = mysql.createConnection({
+  // timeout:100,
   host: "6cb.h.filess.io",
   user: "millproject_childgift",
   password: "b6864e2d23b4e4aa8fdc0c0cf88dbf7b868f55f3",
@@ -37,6 +39,30 @@ const sqlConnect = mysql.createConnection({
 //     'mysql://0uocyc7rjyedqjonkgee:pscale_pw_nsrVevuHV9KLonqur2G4a8oTnYVGozyMS6yHLAZ4LzA@us-east.connect.psdb.cloud/new-mill?ssl={"rejectUnauthorized":true}',
 // });
 
+// img storage confing
+var imgconfig = multer.diskStorage({
+  destination: (req, file, callback) => {
+    callback(null, "../client/src/uploads");
+  },
+  filename: (req, file, callback) => {
+    callback(null, `pdf-${Date.now()}.${file.originalname}`);
+  },
+});
+
+// img filter
+const isPDF = (req, file, callback) => {
+  if (file.mimetype.startsWith("pdf")) {
+    callback(null, true);
+  } else {
+    callback(null, Error("only pdf is allowd"));
+  }
+};
+
+var upload = multer({
+  storage: imgconfig,
+  fileFilter: isPDF,
+});
+
 app.use(cors());
 
 // -------------- login-----------------------------
@@ -45,12 +71,19 @@ app.post("/signUp", jsonParser, function (req, res, next) {
   bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
     sqlConnect.query(
       "INSERT INTO Users (uid,name,phone,password,type,memberNum) VALUES (?,?,?,?,?,?)",
-      [req.body.uid, req.body.name, req.body.phone, hash, req.body.type,req.body.memberNum],
+      [
+        req.body.uid,
+        req.body.name,
+        req.body.phone,
+        hash,
+        req.body.type,
+        req.body.memberNum,
+      ],
       (err, result, fields) => {
         if (err) {
-          return res.json({ status: "error", message: err });
+          res.json({ status: "error", message: err });
         } else {
-          res.json({ status: "Sign Up ok" });
+          res.json({ status: "sucess" });
         }
       }
     );
@@ -119,7 +152,7 @@ app.post("/user", jsonParser, (req, res, next) => {
         }
       }
     );
-  }else if(req.body.phone != null){
+  } else if (req.body.phone != null) {
     sqlConnect.query(
       "SELECT * FROM Users  WHERE phone=?",
       req.body.phone,
@@ -131,8 +164,7 @@ app.post("/user", jsonParser, (req, res, next) => {
         }
       }
     );
-  } 
-  else {
+  } else {
     sqlConnect.query("SELECT * FROM Users", (err, result) => {
       if (err) {
         console.log(err);
@@ -141,6 +173,34 @@ app.post("/user", jsonParser, (req, res, next) => {
       }
     });
   }
+});
+
+app.post("/user/my-rice", jsonParser, (req, res, next) => {
+  sqlConnect.query(
+    "SELECT * FROM Users  WHERE uid=?",
+    req.body.uid,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+app.post("/rice/my-rice", jsonParser, (req, res) => {
+  sqlConnect.query(
+    "SELECT * FROM Rice WHERE RiceDepositor=?",
+    req.body.RiceDepositor,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    }
+  );
 });
 
 app.get("/rice", jsonParser, (req, res) => {
@@ -193,30 +253,41 @@ app.post("/add-rice", jsonParser, function (req, res, next) {
       if (err) {
         return res.json({ status: "error", message: err });
       } else {
-        res.json({ status: "INSERT ok" });
+        res.json({ status: "add ok" });
       }
     }
   );
 });
 
-app.post("/update-temp-rice", jsonParser, (req, res) => {
-  sqlConnect.query(
-    "INSERT INTO Temp (RiceID,RiceDayCheck,RiceO2,RiceMoisture) VALUES (?,?,?,?)",
-    [
-      req.body.RiceID,
-      req.body.RiceDayCheck,
-      req.body.RiceO2,
-      req.body.RiceMoisture,
-    ],
-    (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        // res.send(result);
-        res.json({ status: "UPDATE temp ok" });
+app.post("/update-temp-rice", upload.single("RiceURL"), (req, res) => {
+  const { filename } = req.file;
+
+  // if (!RicePDF) {
+  //   res.status(422).json({ status: 422, message: "fill all the details" });
+  // }
+
+  try {
+    sqlConnect.query(
+      "INSERT INTO Temp SET ?",
+      {
+        RiceID: req.body.RiceID,
+        RiceDayCheck: req.body.RiceDayCheck,
+        RiceO2: req.body.RiceO2,
+        RiceMoisture: req.body.RiceMoisture,
+        RiceURL: filename,
+      },
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          // res.send(result);
+          res.json({ status: "UPDATE temp ok" });
+        }
       }
-    }
-  );
+    );
+  } catch (error) {
+    res.status(422).json({ status: 422, error });
+  }
 });
 
 app.post("/rice/update", jsonParser, (req, res, next) => {
@@ -247,7 +318,6 @@ app.get("/search/user-admin", jsonParser, (req, res) => {
     }
   );
 });
-
 
 /////////////////////////////////////////////////////
 app.get("/showrice", jsonParser, (req, res) => {

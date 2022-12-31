@@ -1,21 +1,27 @@
 import React from "react";
-import { Container } from "react-bootstrap";
+import { Button, Container } from "react-bootstrap";
 import ListRiceAdmin from "./ListRiceAdmin";
 import { Link } from "@mui/material";
 import * as IconMd from "react-icons/md";
-import Dashbord from "./Dashbord";
+import Dashboard from "../../layout/Dashboard";
 
 export default function HomeAdmin() {
   return (
-    <div className="container mt-3">
-      <h3>Scan QR</h3>
-      <hr />
+    <div className="container mt-3" >
       <div className="text-center">
-        <Link className="mb-5 btn btn-outline-info" href="admin/qr-scanner">
+        <Button
+          className=" btn-scan my-2 "
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="สแกนเพื่อค้นหารายการข้าว"
+          variant="outline-secondary"
+          style={{ border: "1px solid lightgray" }}
+          onClick={() => (window.location.href = "admin/qr-scanner")}
+        >
           <IconMd.MdOutlineQrCodeScanner
             style={{ height: 240, width: 320, color: "black" }}
           />
-        </Link>
+        </Button>
       </div>
 
       <Container>
@@ -36,9 +42,9 @@ export default function HomeAdmin() {
               </Card.Footer>
             </Card> */}
         <div className="mt-3">
-          <h1>Dashbord</h1>
+          <h1>Dashboard</h1>
           <hr />
-          <Dashbord />
+          <Dashboard />
         </div>
 
         <div className="mt-3">

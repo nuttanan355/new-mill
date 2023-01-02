@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import axios from 'axios';
+import axios from "axios";
 import "../../css/signIn.css";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 import { linkDB } from "../../constant";
-
 
 export default function SignIn() {
   const [value, setValue] = useState({
@@ -19,7 +18,7 @@ export default function SignIn() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch(linkDB+"/signIn", {
+    fetch(linkDB + "/signIn", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(value),
@@ -29,24 +28,26 @@ export default function SignIn() {
         if (data.status === "ok") {
           const Toast = Swal.mixin({
             toast: true,
-            position: 'top-end',
+            position: "top-end",
             showConfirmButton: false,
-            timer: 3000,
+            timer: 1000,
             timerProgressBar: true,
             didOpen: (toast) => {
-              toast.addEventListener('mouseenter', Swal.stopTimer)
-              toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-          })
-          
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
+
           Toast.fire({
-            icon: 'success',
-            title: 'SignIn in successfully'
-          })
-          // alert("login sucess");
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("type", data.type);
-          window.location = "/";
+            icon: "success",
+            title: "SignIn in successfully",
+          }).then(() => {
+            // alert("login sucess");
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("uid", data.uid);
+            localStorage.setItem("type", data.type);
+            window.location = "/";
+          });
         } else {
           alert("login failed");
         }
@@ -98,9 +99,9 @@ export default function SignIn() {
                 name="phone"
                 placeholder="phone"
                 onChange={handleChange}
-              // onChange={(e) => {
-              //   setPhone(e.target.value)
-              // }}
+                // onChange={(e) => {
+                //   setPhone(e.target.value)
+                // }}
               />
               <span className="focus-input100"></span>
               <span className="symbol-input100">
@@ -118,9 +119,9 @@ export default function SignIn() {
                 name="password"
                 placeholder="Password"
                 onChange={handleChange}
-              // onChange={(e) => {
-              //   setPassword(e.target.value)
-              // }}
+                // onChange={(e) => {
+                //   setPassword(e.target.value)
+                // }}
               />
 
               <span className="focus-input100"></span>
@@ -130,7 +131,7 @@ export default function SignIn() {
             </div>
 
             <div className="container-login100-form-btn">
-              <button className="login100-form-btn" >
+              <button className="login100-form-btn">
                 {/* onClick={login} */}
                 Login
               </button>

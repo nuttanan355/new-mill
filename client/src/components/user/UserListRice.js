@@ -2,16 +2,16 @@ import React, { useEffect, useState } from "react";
 import Card from "react-bootstrap/Card";
 import axios from "axios";
 import { QRCodeCanvas } from "qrcode.react";
-import { Container, Row } from "react-bootstrap";
+import { Button, Row, Tab, Nav } from "react-bootstrap";
 import { linkDB } from "../../constant";
 
 export default function UserListRice() {
-  const [values, setValues] = useState([]);
+  const [rices, setRices] = useState([]);
   const [result, setResult] = useState([]);
 
   useEffect(() => {
     axios.get(linkDB + "/rice").then((response) => {
-      setValues(response.data);
+      setRices(response.data);
     });
 
     axios.get(linkDB + "/search/user-admin").then((response) => {
@@ -21,69 +21,220 @@ export default function UserListRice() {
 
   return (
     <div className="mb-5 mt-2">
-      <div className="row g-4" style={{ display: "flex", flexWrap: "wrap" }}>
-        {Object.keys(values).map((id, index) => {
-          return (
-            <div
-              key={index}
-              className="itemflex col-sm-3"
-              // style={{
-              //   padding: "10px",
-              //   maxWidth: "50%",
-              //   marginTop: "0px",
-              //   marginBottom: "0px",
-              //   width: "30%",
-              // }}
-            >
-              <Card
-                className="div-btn"
-                variant="warning"
-                data-toggle="tooltip"
-                data-placement="bottom"
-                title="ตรวจรายการข้าวนี้"
-                onClick={() =>
-                  (window.location.href = `/user/view-rice/${values[id].RiceID}`)
-                }
+      <Tab.Container id="top-tabs-example" defaultActiveKey="table">
+        <Nav variant="tabs">
+          <Nav.Item>
+            <Nav.Link eventKey="table">ข้าวทั้งหมด</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="table1">ข้าวที่ฝาก</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="table3">ข้าวส่งคืนแล้ว</Nav.Link>
+          </Nav.Item>
+        </Nav>
+        <div className="mt-3">
+          <Tab.Content>
+            {/*  ข้าวทั้งหมด */}
+            <Tab.Pane eventKey="table">
+              <div
+                className="row g-2"
+                style={{ display: "flex", flexWrap: "wrap" }}
               >
-                <Card.Header
-                  style={{
-                    whiteSpace: "nowrap",
-                    textOverflow: "ellipsis",
-                    overflow: "hidden",
-                  }}
-                >
-                  {values[id].RiceCategory}
-                </Card.Header>
-                <Card.Body>
-                  <Row>
-                    <div
-                      className="col container my-2 text-center"
-                      style={{ marginLeft: "auto", marginRight: "auto" }}
-                    >
-                      <QRCodeCanvas value={values[id].RiceID} />
+                {Object.keys(rices).map((id, i) => {
+                  return (
+                    <div key={i} className="itemflex col-sm-4">
+                               <Card
+                          className="div-btn"
+                          variant="warning"
+                          data-toggle="tooltip"
+                          data-placement="bottom"
+                          title="ตรวจรายการข้าวนี้"
+                          style={
+                            rices[id].RiceReturn == "0"
+                              ? { backgroundColor: "#86C8BC" }
+                              : rices[id].RiceReturn == "1"
+                              ? { backgroundColor: "#FFF6BD" }
+                              : { backgroundColor: "#FFD4B2" }
+                          }
+                        >
+                          <Card.Header
+                            style={{
+                              whiteSpace: "nowrap",
+                              textOverflow: "ellipsis",
+                              overflow: "hidden",
+                            }}
+                          >
+                            <div className="row justify-content-center align-items-center g-2">
+                              <div className="col my-3">
+                                {rices[id].RiceCategory}
+                              </div>
+                            </div>
+                          </Card.Header>
+                          <Card.Body
+                            onClick={() =>
+                              (window.location.href = `/user/view-rice/${rices[id].RiceID}`)
+                            }
+                          >
+                            <Row>
+                              <div
+                                className="col container my-2 text-center"
+                                style={{
+                                  marginLeft: "auto",
+                                  marginRight: "auto",
+                                }}
+                              >
+                                <QRCodeCanvas value={rices[id].RiceID} />
+                              </div>
+                              <h6 className="card-text my-2">
+                                สถานะ :{" "}
+                                {rices[id].RiceReturn == "0"
+                                  ? "กำลังฝาก"
+                                  : rices[id].RiceReturn == "1"
+                                  ? "รออนุมัติส่งคืน"
+                                  : "ส่งคืนแล้ว"}
+                              </h6>
+                            </Row>
+                          </Card.Body>
+                        </Card>
                     </div>
-                  </Row>
-                  {/* <Card.Text>ผู้ฝาก : {values[id].RiceDepositor}</Card.Text> */}
-                  <div>
-                    {" "}
-                    {result
-                      .filter((item) => {
-                        const uid = item.uid.toLowerCase();
-                        const uidRiDep = values[id].RiceDepositor.toLowerCase();
-                        return uid.startsWith(uidRiDep);
-                      })
-                      .map((item, keys) => (
-                        <Card.Text key={keys}>
-                          ผู้ฝาก : {item.name}
-                        </Card.Text>
-                      ))}
-                  </div>
-                </Card.Body>
-              </Card>
-            </div>
-          );
-        })}
-      </div>
+                  );
+                })}
+              </div>
+            </Tab.Pane>
+
+            {/*  ข้าวที่ฝาก */}
+            <Tab.Pane eventKey="table1">
+              <div
+                className="row g-2"
+                style={{ display: "flex", flexWrap: "wrap" }}
+              >
+                {Object.keys(rices).map((id, i) => {
+                  return (
+                    <div key={i} className="itemflex col-sm-4">
+                      {rices[id].RiceReturn == "0" ? (
+                                <Card
+                                className="div-btn"
+                                variant="warning"
+                                data-toggle="tooltip"
+                                data-placement="bottom"
+                                title="ตรวจรายการข้าวนี้"
+                              >
+                                <Card.Header
+                                  style={{
+                                    whiteSpace: "nowrap",
+                                    textOverflow: "ellipsis",
+                                    overflow: "hidden",
+                                  }}
+                                >
+                                  <div className="row justify-content-center align-items-center g-2">
+                                    <div className="col my-3">
+                                      {rices[id].RiceCategory}
+                                    </div>
+                                  </div>
+                                </Card.Header>
+                                <Card.Body
+                                  onClick={() =>
+                                    (window.location.href = `/user/view-rice/${rices[id].RiceID}`)
+                                  }
+                                >
+                                  <Row>
+                                    <div
+                                      className="col container my-2 text-center"
+                                      style={{
+                                        marginLeft: "auto",
+                                        marginRight: "auto",
+                                      }}
+                                    >
+                                      <QRCodeCanvas value={rices[id].RiceID} />
+                                    </div>
+                                    <h6 className="card-text my-2">
+                                      สถานะ :{" "}
+                                      {rices[id].RiceReturn == "0"
+                                        ? "กำลังฝาก"
+                                        : rices[id].RiceReturn == "1"
+                                        ? "รออนุมัติส่งคืน"
+                                        : "ส่งคืนแล้ว"}
+                                    </h6>
+                                  </Row>
+                                </Card.Body>
+                              </Card>
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </Tab.Pane>
+
+            {/*  ข้าวส่งคืนแล้ว */}
+            <Tab.Pane eventKey="table3">
+              <div
+                className="row g-2"
+                style={{ display: "flex", flexWrap: "wrap" }}
+              >
+                {Object.keys(rices).map((id, i) => {
+                  return (
+                    <div key={i} className="itemflex col-sm-4">
+                      {rices[id].RiceReturn == "2" ? (
+                        <Card
+                          className="div-btn"
+                          variant="warning"
+                          data-toggle="tooltip"
+                          data-placement="bottom"
+                          title="ตรวจรายการข้าวนี้"
+                        >
+                          <Card.Header
+                            style={{
+                              whiteSpace: "nowrap",
+                              textOverflow: "ellipsis",
+                              overflow: "hidden",
+                            }}
+                          >
+                            <div className="row justify-content-center align-items-center g-2">
+                              <div className="col my-3">
+                                {rices[id].RiceCategory}
+                              </div>
+                            </div>
+                          </Card.Header>
+                          <Card.Body
+                            onClick={() =>
+                              (window.location.href = `/user/view-rice/${rices[id].RiceID}`)
+                            }
+                          >
+                            <Row>
+                              <div
+                                className="col container my-2 text-center"
+                                style={{
+                                  marginLeft: "auto",
+                                  marginRight: "auto",
+                                }}
+                              >
+                                <QRCodeCanvas value={rices[id].RiceID} />
+                              </div>
+                              <h6 className="card-text my-2">
+                                สถานะ :{" "}
+                                {rices[id].RiceReturn == "0"
+                                  ? "กำลังฝาก"
+                                  : rices[id].RiceReturn == "1"
+                                  ? "รออนุมัติส่งคืน"
+                                  : "ส่งคืนแล้ว"}
+                              </h6>
+                            </Row>
+                          </Card.Body>
+                        </Card>
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </Tab.Pane>
+          </Tab.Content>
+        </div>
+      </Tab.Container>
     </div>
   );
 }

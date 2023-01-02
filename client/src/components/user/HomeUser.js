@@ -33,7 +33,7 @@ export default function HomeUser() {
         .then((data) => {
           if (data.status === "ok") {
             // alert("token sucess");
-            localStorage.setItem("token", data.message);
+            // localStorage.setItem("token", data.token);
             // window.location = "/";
           } else {
             alert("token failed");
@@ -97,7 +97,7 @@ export default function HomeUser() {
         </Col>
       </Row>
       <hr />
-      <div className="container">
+      <div className="container mt-3">
         <UserListRice />
         {/* {values.map((id,index)=>{
           return(

@@ -10,6 +10,7 @@ export default function SignUp() {
   var DbLink = linkDB + "/user";
 
   const [users, setUsers] = useState({});
+  const [Verified, setVerified] = useState(false);
 
   const [value, setValue] = useState({
     uid: genKey(),
@@ -24,7 +25,7 @@ export default function SignUp() {
     axios.post(DbLink, { phone: value.phone }).then((response) => {
       if (response.data[0] != null) {
         setUsers(response.data[0].phone);
-        // console.log(response.data);
+        // console.log(response.data[0].phone);
       } else {
         setUsers({});
       }
@@ -39,9 +40,17 @@ export default function SignUp() {
 
   const handleChange = (e) => {
     setValue({ ...value, [e.target.name]: e.target.value });
-    console.log(value);
+    // console.log(value);
   };
-  console.log(value.memberNums);
+
+  const onChangeReCAPTCHA = (value) => {
+    if (value !== null) {
+      setVerified(true);
+    }
+  };
+
+  // console.log(users);
+
 
   const handleSubmit = () => {
     if (value.fullName === "") {
@@ -124,22 +133,21 @@ export default function SignUp() {
             console.error("Error:", error);
           });
 
-      //   axios
-      //     .post(linkDB + "/signUp", jsonData)
-      //     .then((response) => response.json())
-      //     .then((data) => {
-      //       console.log(data);
-      //       if (data.status === "sucess") {
-      //         alert("SignUp sucess");
-      //         window.location = "/";
-      //       } else {
-      //         alert("SignUp failed");
-      //       }
-      //     })
-      //     .catch((err) => {
-      //       console.error("Error:", err);
-      //     });
-
+        //   axios
+        //     .post(linkDB + "/signUp", jsonData)
+        //     .then((response) => response.json())
+        //     .then((data) => {
+        //       console.log(data);
+        //       if (data.status === "sucess") {
+        //         alert("SignUp sucess");
+        //         window.location = "/";
+        //       } else {
+        //         alert("SignUp failed");
+        //       }
+        //     })
+        //     .catch((err) => {
+        //       console.error("Error:", err);
+        //     });
       } catch (error) {
         console.log(error);
       }
@@ -147,13 +155,13 @@ export default function SignUp() {
   };
 
   return (
-    <div className="limiter">
+    <div className="limiter" style={{ background: "#EEF1FF" }}>
       <div className="container-login100">
         <div
           style={{
-            background: "#FFF5E4",
+            background: "white",
             width: "500px",
-            padding: "20px",
+            padding: "30px",
             textAlign: "center",
             borderRadius: "15px",
           }}
@@ -218,18 +226,19 @@ export default function SignUp() {
                 <i className="fa fa-key" aria-hidden="true"></i>
               </span>
             </div>
-            {/* <div className="col-xs-1-12">
+            <div className="col-xs-1-12 ">
               <ReCAPTCHA
                 name="captcha"
-                sitekey="6Lek5RcaAAAAAOI99PLPqwjK_dFooznTeFFvHniT"
-                onChange={handleChange}
+                sitekey="6LddEL4jAAAAACBVE-OlaKcarcT1tmjbqt2YZ6Iw"
+                onChange={onChangeReCAPTCHA}
               />
-            </div> */}
+            </div>
 
             <div className="d-grid mt-4">
               <button
                 type="button"
                 className="btn btn-primary"
+                disabled={!Verified}
                 onClick={() => handleSubmit()}
               >
                 Sign Up

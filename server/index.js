@@ -91,6 +91,30 @@ app.post("/signUp", jsonParser, function (req, res, next) {
   });
 });
 
+app.post("/signUp", jsonParser, function (req, res, next) {
+  bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
+    sqlConnect.query(
+      "INSERT INTO Users (uid,name,phone,password,type,memberNum) VALUES (?,?,?,?,?,?)",
+      [
+        req.body.uid,
+        req.body.name,
+        req.body.phone,
+        hash,
+        req.body.type,
+        req.body.memberNum,
+      ],
+      (err, result, fields) => {
+        if (err) {
+          res.json({ status: "error", message: err });
+        } else {
+          res.json({ status: "sucess" });
+        }
+      }
+    );
+    // Store hash in your password DB.
+  });
+});
+
 app.post("/signIn", jsonParser, function (req, res, next) {
   sqlConnect.query(
     "SELECT * FROM `Users` WHERE phone=?",
@@ -105,19 +129,13 @@ app.post("/signIn", jsonParser, function (req, res, next) {
           users[0].password,
           (err, isSignIn) => {
             if (isSignIn) {
-              var token = jwt.sign(
-                {
-                  phone: users[0].phone,
-                  uid: users[0].uid,
-                },
-                tokenSignIn
-              );
-              // alert(`this user id : ${users[0].uid}`)
+              var token = jwt.sign({ phone: users[0].phone }, tokenSignIn);
               res.json({
                 status: "ok",
                 message: "Sign In Success",
                 token,
                 type: users[0].type,
+                uid: users[0].uid,
               });
             } else {
               res.json({ status: "ERROR", message: "Error Sign In" });
@@ -305,6 +323,38 @@ app.post("/rice/update", jsonParser, (req, res, next) => {
     }
   );
 });
+
+app.put("/rice/update-return/:id/:reRice", (req, res) => {
+  sqlConnect.query("UPDATE `Rice` SET `RiceReturn` =? WHERE `RiceID` =?",[req.params.reRice, req.params.id],
+    (err, result) => {
+      if (err) {
+        res.json({ status: "error", message: err })
+      } else {
+        res.json({ status: "ok",message: result  });
+      }
+    }
+  );
+});
+
+app.put("/update", (req, res) => {
+  const id = req.body.RiceID;
+  const wage = req.body.RiceReturn;
+  SqlDB.query(
+    "UPDATE Rice SET RiceReturn = ? WHERE RiceID = ?",
+    [wage, id],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+
+
+
 
 app.get("/search/user-admin", jsonParser, (req, res) => {
   sqlConnect.query(

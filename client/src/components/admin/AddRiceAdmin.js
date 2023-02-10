@@ -106,7 +106,7 @@ export default function AddRiceAdmin() {
             <div id="myqr" className="container card-body">
               <QRcode
                 className="card-img-top"
-                value={values.RiceID}
+                value={"http://localhost:3000"+"/view-rice/"+values.RiceID}
                 size={250}
                 includeMargin={true}
               />

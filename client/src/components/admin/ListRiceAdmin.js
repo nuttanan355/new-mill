@@ -10,6 +10,7 @@ export default function ListRiceAdmin() {
   const [result, setResult] = useState([]);
 
   const RicesReturn = Object.keys(rices).map((id) => rices[id].RiceReturn);
+  
   const RiceRet = (ret) => {
     return RicesReturn.filter((rets) => rets == ret);
   };
@@ -71,7 +72,7 @@ export default function ListRiceAdmin() {
                   data-placement="bottom"
                   title="ตรวจรายการข้าวนี้"
                   onClick={() =>
-                    (window.location.href = `/admin/edit-rice/${values[id].RiceID}`)
+                    (window.location.href = `/view-rice/${values[id].RiceID}`)
                   }
                 >
                   <Card.Header
@@ -184,6 +185,7 @@ export default function ListRiceAdmin() {
                   className="row g-2"
                   style={{ display: "flex", flexWrap: "wrap" }}
                 >
+                  {/* <div style={{backgroundColor:'#fff'}} display={'hidden'} >55 </div> */}
                   {Object.keys(rices).map((id, i) => {
                     return (
                       <div key={i} className="itemflex col-sm-4">
@@ -216,7 +218,7 @@ export default function ListRiceAdmin() {
                           </Card.Header>
                           <Card.Body
                             onClick={() =>
-                              (window.location.href = `/admin/edit-rice/${rices[id].RiceID}`)
+                              (window.location.href = `/view-rice/${rices[id].RiceID}`)
                             }
                           >
                             <Row>
@@ -227,7 +229,7 @@ export default function ListRiceAdmin() {
                                   marginRight: "auto",
                                 }}
                               >
-                                <QRCodeCanvas value={rices[id].RiceID} />
+                                <QRCodeCanvas value={"http://localhost:3000"+"/view-rice/"+rices[id].RiceID} />
                               </div>
                               <h6 className="card-text my-2">
                                 สถานะ :{" "}
@@ -292,7 +294,7 @@ export default function ListRiceAdmin() {
                             </Card.Header>
                             <Card.Body
                               onClick={() =>
-                                (window.location.href = `/admin/edit-rice/${rices[id].RiceID}`)
+                                (window.location.href = `/view-rice/${rices[id].RiceID}`)
                               }
                             >
                               <Row>
@@ -372,7 +374,7 @@ export default function ListRiceAdmin() {
                                 </Card.Header>
                                 <Card.Body
                                   onClick={() =>
-                                    (window.location.href = `/admin/edit-rice/${rices[id].RiceID}`)
+                                    (window.location.href = `/view-rice/${rices[id].RiceID}`)
                                   }
                                 >
                                   <Row>

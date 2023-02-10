@@ -24,7 +24,7 @@ export const RouterNoLogin =[
         element: <SignIn />,
       },
       {
-        path: "/user/view-rice/:id",
+        path: "/view-rice/:id",
         element: <ViewRice />,
       },
     

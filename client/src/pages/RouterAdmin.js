@@ -36,7 +36,7 @@ export const RouterAdmin = [
     element: <SignUp />,
   },
   {
-    path: "/admin/edit-rice/:id",
+    path: "/view-rice/:id",
     element: <EditRiceAdmin />,
   },
   {

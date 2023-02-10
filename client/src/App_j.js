@@ -11,6 +11,7 @@ import { RouterNoLogin } from "./pages/RouterNoLogin";
 
 import Footer from "./layout/Footer";
 import NavbarIndex from "./layout/NavbarIndex";
+import 'charts.css'
 
 
 function App() {

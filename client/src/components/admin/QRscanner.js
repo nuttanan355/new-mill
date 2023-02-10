@@ -14,7 +14,7 @@ export default function QRscanner() {
         <hr/>
         {qrscan == "Not Result" ? (
        <>
-          <div className="container mt-2" style={{ backgroundColor:'gray',height: "100%", width: "100%" }}>
+          <div className="container mt-2" style={{ backgroundColor:'gray',height: "25rem", width: "25rem" }}>
             <QrReader
               delay={300}
               onResult={(result, error) =>
@@ -30,7 +30,10 @@ export default function QRscanner() {
        </>
         ) : (
         
-            window.location.href = `/admin/edit-rice/${qrscan}`
+            window.location.href = qrscan
+            // window.location.href = `/view-rice/${qrscan}`
+            // window.open(qrscan)
+
           
         )}
 

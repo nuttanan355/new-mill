@@ -29,7 +29,7 @@ export const RouterUser = [
     element: <SignIn />,
   },
   {
-    path: "/user/view-rice/:id",
+    path: "/view-rice/:id",
     element: <ViewRice />,
   },
 

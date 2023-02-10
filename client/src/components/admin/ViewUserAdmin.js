@@ -205,7 +205,7 @@ export default function ViewUserAdmin() {
                               </Card.Header>
                               <Card.Body
                                 onClick={() =>
-                                  (window.location.href = `/admin/edit-rice/${rices[id].RiceID}`)
+                                  (window.location.href = `/view-rice/${rices[id].RiceID}`)
                                 }
                               >
                                 <Row>
@@ -286,7 +286,7 @@ export default function ViewUserAdmin() {
                                 </Card.Header>
                                 <Card.Body
                                   onClick={() =>
-                                    (window.location.href = `/admin/edit-rice/${rices[id].RiceID}`)
+                                    (window.location.href = `/view-rice/${rices[id].RiceID}`)
                                   }
                                 >
                                   <Row>
@@ -368,7 +368,7 @@ export default function ViewUserAdmin() {
                                 </Card.Header>
                                 <Card.Body
                                   onClick={() =>
-                                    (window.location.href = `/admin/edit-rice/${rices[id].RiceID}`)
+                                    (window.location.href = `/view-rice/${rices[id].RiceID}`)
                                   }
                                 >
                                   <Row>
@@ -451,7 +451,7 @@ export default function ViewUserAdmin() {
                                 </Card.Header>
                                 <Card.Body
                                   onClick={() =>
-                                    (window.location.href = `/admin/edit-rice/${rices[id].RiceID}`)
+                                    (window.location.href = `/view-rice/${rices[id].RiceID}`)
                                   }
                                 >
                                   <Row>

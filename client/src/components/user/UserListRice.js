@@ -73,7 +73,7 @@ export default function UserListRice() {
                           </Card.Header>
                           <Card.Body
                             onClick={() =>
-                              (window.location.href = `/user/view-rice/${rices[id].RiceID}`)
+                              (window.location.href = `/view-rice/${rices[id].RiceID}`)
                             }
                           >
                             <Row>
@@ -135,7 +135,7 @@ export default function UserListRice() {
                                 </Card.Header>
                                 <Card.Body
                                   onClick={() =>
-                                    (window.location.href = `/user/view-rice/${rices[id].RiceID}`)
+                                    (window.location.href = `/view-rice/${rices[id].RiceID}`)
                                   }
                                 >
                                   <Row>
@@ -200,7 +200,7 @@ export default function UserListRice() {
                           </Card.Header>
                           <Card.Body
                             onClick={() =>
-                              (window.location.href = `/user/view-rice/${rices[id].RiceID}`)
+                              (window.location.href = `/view-rice/${rices[id].RiceID}`)
                             }
                           >
                             <Row>

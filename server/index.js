@@ -45,7 +45,8 @@ var imgconfig = multer.diskStorage({
     callback(null, "../client/src/uploads");
   },
   filename: (req, file, callback) => {
-    callback(null, `pdf-${Date.now()}.${file.originalname}`);
+    callback(null, `pdf-${Date.now()}.pdf`);
+    // callback(null, `pdf-${Date.now()}.${file.originalname}`);
   },
 });
 

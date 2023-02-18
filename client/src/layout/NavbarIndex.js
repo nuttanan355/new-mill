@@ -12,36 +12,12 @@ import * as IconHi from "react-icons/hi";
 function NavbarIndex() {
   const [user, setUser] = useState(null);
 
-
-
   useEffect(() => {
     var token = localStorage.getItem("token");
-    // console.log(token);
     setUser(token);
   }, []);
 
 
-  // const [login, setLogin] = useState();
-
-  // const [value, setValue] = useState('');
-  // const [result, setResult] = useState([]);
-
-  // const onChange = (event) => {
-  //   setValue(event.target.value);
-  // }
-
-  // const onSearch = (searchTerm) => {
-  //   // console.log(searchTerm);
-  //   setValue(searchTerm);
-  // }
-
-  // useEffect(() => {
-  //   axios.post(linkDB+'/searchriceuser', { uid: user }
-  //   ).then((response) => {
-  //     setResult(response.data);
-  //     // console.log(` ${result} => result`)
-  //   });
-  // }, [])
 
   return (
     <div>

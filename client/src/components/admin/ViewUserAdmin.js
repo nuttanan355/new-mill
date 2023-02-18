@@ -158,7 +158,7 @@ export default function ViewUserAdmin() {
                   <Nav.Link eventKey="table1">ข้าวที่ฝาก ({RiceRet('0').length})</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey="table2">ข้าวขอส่งคืน ({RiceRet('1').length})</Nav.Link>
+                  <Nav.Link eventKey="table2">ข้าวขออนุมัติส่งคืน ({RiceRet('1').length})</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
                   <Nav.Link eventKey="table3">ข้าวส่งคืนแล้ว ({RiceRet('2').length})</Nav.Link>
@@ -312,7 +312,7 @@ export default function ViewUserAdmin() {
                               </Card>
                               </div>
                             ) : (
-                              <div key={i} ></div>
+                              <div key={i} style={{display:'none'}}></div>
                             )
                           
                         );
@@ -394,7 +394,7 @@ export default function ViewUserAdmin() {
                               </Card>
                               </div>
                             ) : (
-                              <div key={i} ></div>
+                              <div key={i} style={{display:'none'}}></div>
                             )
                         );
                       })}
@@ -477,7 +477,7 @@ export default function ViewUserAdmin() {
                               </Card>
                               </div>
                             ) : (
-                              <div key={i} ></div>
+                              <div key={i} style={{display:'none'}}></div>
                             )
                         );
                       })}

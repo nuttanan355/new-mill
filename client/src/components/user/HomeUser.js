@@ -3,6 +3,7 @@ import { Row, Col, Card } from "react-bootstrap";
 import axios from "axios";
 import UserListRice from "./UserListRice";
 import { linkDB } from "../../constant";
+import Dashboard from "../../layout/Dashboard";
 
 export default function HomeUser() {
   const [values, setValues] = useState([]);
@@ -57,46 +58,11 @@ export default function HomeUser() {
 
 
   return (
-    <div className="container mt-2 h-100">
+    <div className="container pt-2 h-100" style={{backgroundColor:'white'}}>
+
+      <Dashboard/>
       <h1>รับฝากข้าว</h1>
-      <Row className="mt-3 mb-4 p-2">
-        <Col>
-          <Card
-            style={{
-              backgroundImage: "linear-gradient(to right, #CCFFFF, #66CCFF)",
-              color: "black",
-            }}
-          >
-            <Card.Body className=" text-center">
-              <Card.Title>{RiceRet('2').length}  </Card.Title>
-
-              {/* {Rice.map(item => {
-                return <Card.Title> {item.Returned} </Card.Title>
-              })} */}
-
-            </Card.Body>
-            <Card.Footer className="text-right">
-              <Card.Text> ส่งคืนแล้ว </Card.Text>
-            </Card.Footer>
-          </Card>
-        </Col>
-        <Col>
-          <Card
-            style={{
-              backgroundImage: "linear-gradient(to right, #FFFFCC, #FF9933)",
-              color: "Black",
-            }}
-          >
-            <Card.Body className=" text-center">
-              <Card.Title>{RiceRet('0').length} </Card.Title>
-            </Card.Body>
-            <Card.Footer className="text-right">
-              <Card.Text> ยังไม่ส่งคืน </Card.Text>
-            </Card.Footer>
-          </Card>
-        </Col>
-      </Row>
-      <hr />
+    
       <div className="container mt-3">
         <UserListRice />
         {/* {values.map((id,index)=>{

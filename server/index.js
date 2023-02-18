@@ -19,15 +19,21 @@ const mysql = require("mysql");
 const multer = require("multer");
 const PORT = 3030;
 
+// const sqlConnect = mysql.createConnection({
+//   host: "6cb.h.filess.io",
+//   user: "millproject_childgift",
+//   password: "b6864e2d23b4e4aa8fdc0c0cf88dbf7b868f55f3",
+//   database: "millproject_childgift",
+//   port: "3307",
+//   localAddress:
+//     "mysql://millproject_childgift:b6864e2d23b4e4aa8fdc0c0cf88dbf7b868f55f3@6cb.h.filess.io:3307/millproject_childgift",
+// });
+
 const sqlConnect = mysql.createConnection({
-  // timeout:100,
-  host: "6cb.h.filess.io",
-  user: "millproject_childgift",
-  password: "b6864e2d23b4e4aa8fdc0c0cf88dbf7b868f55f3",
+  user: "root",
+  host: "127.0.0.1",
+  password: "",
   database: "millproject_childgift",
-  port: "3307",
-  localAddress:
-    "mysql://millproject_childgift:b6864e2d23b4e4aa8fdc0c0cf88dbf7b868f55f3@6cb.h.filess.io:3307/millproject_childgift",
 });
 
 // const sqlConnect = mysql.createConnection({
@@ -67,30 +73,6 @@ var upload = multer({
 app.use(cors());
 
 // -------------- login-----------------------------
-
-app.post("/signUp", jsonParser, function (req, res, next) {
-  bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
-    sqlConnect.query(
-      "INSERT INTO Users (uid,name,phone,password,type,memberNum) VALUES (?,?,?,?,?,?)",
-      [
-        req.body.uid,
-        req.body.name,
-        req.body.phone,
-        hash,
-        req.body.type,
-        req.body.memberNum,
-      ],
-      (err, result, fields) => {
-        if (err) {
-          res.json({ status: "error", message: err });
-        } else {
-          res.json({ status: "sucess" });
-        }
-      }
-    );
-    // Store hash in your password DB.
-  });
-});
 
 app.post("/signUp", jsonParser, function (req, res, next) {
   bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
@@ -242,6 +224,18 @@ app.get("/type", jsonParser, (req, res) => {
   });
 });
 
+app.get("/type-dashboard", jsonParser, (req, res) => {
+  sqlConnect.query(
+    "SELECT COUNT(`RiceQuantity`), SUM(`RiceQuantity`), `RiceCategory` FROM `rice` GROUP BY `RiceCategory`;",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
 app.post("/rice/temp", jsonParser, (req, res) => {
   sqlConnect.query(
     "SELECT * FROM Temp  WHERE RiceID=?",
@@ -326,12 +320,14 @@ app.post("/rice/update", jsonParser, (req, res, next) => {
 });
 
 app.put("/rice/update-return/:id/:reRice", (req, res) => {
-  sqlConnect.query("UPDATE `Rice` SET `RiceReturn` =? WHERE `RiceID` =?",[req.params.reRice, req.params.id],
+  sqlConnect.query(
+    "UPDATE `Rice` SET `RiceReturn` =? WHERE `RiceID` =?",
+    [req.params.reRice, req.params.id],
     (err, result) => {
       if (err) {
-        res.json({ status: "error", message: err })
+        res.json({ status: "error", message: err });
       } else {
-        res.json({ status: "ok",message: result  });
+        res.json({ status: "ok", message: result });
       }
     }
   );
@@ -352,10 +348,6 @@ app.put("/update", (req, res) => {
     }
   );
 });
-
-
-
-
 
 app.get("/search/user-admin", jsonParser, (req, res) => {
   sqlConnect.query(

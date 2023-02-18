@@ -19,6 +19,8 @@ function NavbarAdmin() {
     setValue(event.target.value);
   };
 
+  
+
   const onSearch = (searchTerm) => {
     setValue(searchTerm);
   };

@@ -1,11 +1,17 @@
 import React from "react";
 import { Button, Container } from "react-bootstrap";
 import ListRiceAdmin from "./ListRiceAdmin";
-import { Link } from "@mui/material";
 import * as IconMd from "react-icons/md";
 import Dashboard from "../../layout/Dashboard";
 
+
 export default function HomeAdmin() {
+
+
+
+
+
+
   return (
     <div className="container mt-3" >
       <div className="text-center">
@@ -25,26 +31,11 @@ export default function HomeAdmin() {
       </div>
 
       <Container>
-        {/* <h1>List Users</h1>
-          <hr />
-          
-            <Card
-              style={{
-                backgroundImage: "linear-gradient(to right, #00DE32, #038905)",
-                color: "white",
-              }}
-            >
-              <Card.Body className=" text-center">
-                <Card.Title>{AllUsers.length} </Card.Title>
-              </Card.Body>
-              <Card.Footer className="text-right">
-                <Card.Text> ALL USER </Card.Text>
-              </Card.Footer>
-            </Card> */}
         <div className="mt-3">
           <h1>Dashboard</h1>
           <hr />
-          <Dashboard />
+          <Dashboard/>
+         
         </div>
 
         <div className="mt-3">

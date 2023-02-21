@@ -64,29 +64,43 @@ span {
 .dropdown {
   display: flex;
   flex-direction: column;
-  /* border: 1px solid gray; */
+  background-color: rgb(234, 255, 234);
+
+  /* border: 0px solid gray; */
   z-index: 2;
 }
 
 .dropdown:empty {
+  
   border: none;
 }
 
 input {
   font-size: medium;
   border-radius: 5px;
+  
 
 }
 
 .dropdown-row {
+  /* background-color: rgb(170, 248, 169); */
+
   cursor: pointer;
   text-align: start;
   /* margin: 2px 0; */
   font-size: medium;
-  border: 1px solid gray;
+  border-radius: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* border: 1px solid gray; */
+}
+
+.dropdown-row:hover {
+  background-color: rgb(232, 252, 187);
 }
 
 .dropdown-id {
+  
   text-align: end;
   font-size: smaller;
 }
@@ -97,14 +111,56 @@ input {
 }
 
 #column-example-20 {
-  height:300px;
+  height: 300px;
   /* max-width:400px; */
   margin: 0 auto;
 }
-.div-main{
-  background: #c0fcea; /* For browsers that do not support gradients */    
-  background: -webkit-linear-gradient(left top, #c0fcea, #fff); /* For Safari 5.1 to 6.0 */
-  background: -o-linear-gradient(bottom right, #c0fcea, #fff); /* For Opera 11.1 to 12.0 */
-  background: -moz-linear-gradient(bottom right, #c0fcea, #fff); /* For Firefox 3.6 to 15 */
-  background: linear-gradient(to bottom right, #c0fcea, #fff); /* Standard syntax (must be last) */
+
+.div-main {
+  min-height: 100vh;
+  background: #c0fcea;
+  /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(left top, #c0fcea, #fff);
+  /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(bottom right, #c0fcea, #fff);
+  /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(bottom right, #c0fcea, #fff);
+  /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to bottom right, #c0fcea, #fff);
+  /* Standard syntax (must be last) */
+}
+
+.div-dashbord {
+  /* background-color: aqua; */
+  /* height:auto; */
+  /* width: 60%; */
+  align-items: center;
+  margin: 0 auto 0 auto;
+
+}
+
+/* .div-dashbord-all { */
+/* background-color: aqua; */
+/* height:auto; */
+/* width: 100%; */
+/* align-items: center; */
+/* margin: auto; */
+
+/* } */
+.div-statu-txt {
+  /* margin: 0 auto 10px auto; */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* .div-statu-all { */
+/* background-color: aqua; */
+/* align-items: center; */
+
+/* } */
+
+.name-depos{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

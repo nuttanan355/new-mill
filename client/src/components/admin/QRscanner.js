@@ -8,8 +8,7 @@ export default function QRscanner() {
 
 
   return (
-    <div>
-      <div className="mt-2 text-center">
+      <div className="pt-3 text-center"style={{backgroundColor:'red',height:'100vw',maxHeight:'600px'}}>
         <h2>QR Scanner</h2>
         <hr/>
         {qrscan == "Not Result" ? (
@@ -46,6 +45,6 @@ export default function QRscanner() {
         </div> */}
 
       </div>
-    </div>
+ 
   );
 }

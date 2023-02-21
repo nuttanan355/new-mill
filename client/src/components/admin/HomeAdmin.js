@@ -3,44 +3,39 @@ import { Button, Container } from "react-bootstrap";
 import ListRiceAdmin from "./ListRiceAdmin";
 import * as IconMd from "react-icons/md";
 import Dashboard from "../../layout/Dashboard";
-
+import Status from "../../layout/Status";
 
 export default function HomeAdmin() {
-
-
-
-
-
-
   return (
-    <div className="container mt-3" >
-      <div className="text-center">
+    <div className="container pt-3 home-admin">
+      <div className="text-center btn-scan">
         <Button
-          className=" btn-scan my-2 "
+          className=" btn-scan "
           data-toggle="tooltip"
           data-placement="bottom"
           title="สแกนเพื่อค้นหารายการข้าว"
           variant="outline-secondary"
-          style={{ border: "1px solid lightgray" }}
           onClick={() => (window.location.href = "admin/qr-scanner")}
         >
           <IconMd.MdOutlineQrCodeScanner
-            style={{ height: 240, width: 320, color: "black" }}
+            style={{ height: "100%", width: "100%", color: "black" }}
           />
         </Button>
       </div>
 
       <Container>
         <div className="mt-3">
-          <h1>Dashboard</h1>
+          <h1>ปริมาณข้าว</h1>
           <hr />
-          <Dashboard/>
-         
+          <div style={{ alignItems: "center" }} className="row div-dashbord ">
+            <Dashboard />
+          </div>
+
+          {/* <Status /> */}
         </div>
 
         <div className="mt-3">
-          <h1>รายการข้าว</h1>
-          <hr />
+         
           <ListRiceAdmin />
         </div>
       </Container>

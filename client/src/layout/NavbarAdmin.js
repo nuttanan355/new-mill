@@ -5,7 +5,7 @@ import SignOut from "../components/login/SignOut";
 import axios from "axios";
 import { linkDB } from "../constant";
 import * as IconHi from "react-icons/hi";
-
+import { Select } from "antd";
 
 // const rice = require('./route')
 
@@ -14,12 +14,11 @@ function NavbarAdmin() {
 
   const [value, setValue] = useState("");
   const [result, setResult] = useState([]);
+  // const [resultAnt, setResultAnt] = useState({});
 
   const onChange = (event) => {
     setValue(event.target.value);
   };
-
-  
 
   const onSearch = (searchTerm) => {
     setValue(searchTerm);
@@ -30,7 +29,10 @@ function NavbarAdmin() {
       setResult(response.data);
       // console.log(` ${result} => result`)
     });
+    // axios.post(linkDB + "/user",{ userType: "User" }).then((response) => setResultAnt(response.data));
   }, []);
+
+  // console.log(resultAnt);
 
   return (
     <div>
@@ -38,7 +40,7 @@ function NavbarAdmin() {
         <Container fluid>
           <Navbar.Brand href="/">Mill Project</Navbar.Brand>
 
-          <Navbar.Text  className="col-6">
+          <Navbar.Text className="col-6">
             <Nav.Item className="w-100">
               <div className="search-container">
                 <div className="search-inner input-group">
@@ -67,22 +69,29 @@ function NavbarAdmin() {
                     </svg>
                   </span>
                 </div>
-                
-                <div className="dropdown mt-5" style={{ position: "absolute", background: "#ffff",width:'500px'}}>
+
+                <div
+                  className="dropdown mt-5"
+                  style={{
+                    position: "absolute",
+                    width: "49%",
+                    borderRadius:'10px'
+                  }}
+                >
                   {result
                     .filter((item) => {
                       // phone,memberNum,name
                       const searchTerm = value.toLowerCase();
-                      const phone = item.phone.toLowerCase();
+                      // const phone = item.phone.toLowerCase();
                       const memberNum = item.memberNum.toLowerCase();
                       const name = item.name.toLowerCase();
 
                       // return searchTerm && RiceCategory !== searchTerm && RiceCategory.startsWith(searchTerm)
                       return (
-                        (searchTerm &&
-                          phone &&
-                          phone.startsWith(searchTerm) &&
-                          phone !== searchTerm) ||
+                        // (searchTerm &&
+                        //   phone &&
+                        //   phone.startsWith(searchTerm) &&
+                        //   phone !== searchTerm) ||
                         (searchTerm &&
                           memberNum &&
                           memberNum !== searchTerm &&
@@ -94,18 +103,11 @@ function NavbarAdmin() {
                       );
                     })
                     .map((item, keys) => (
-                      <div
-                        key={keys}
-                        className="dropdown-row"
-                        style={{ position: "relative"}}
-                        onClick={() =>
-                          (window.location.href = `/admin/view-user/${item.uid}`)
-                        }
-                      >
-                        <div className="dropdown-id text-muted ">
-                          <div className="row justify-content-center align-items-center g-2">
-                            <p className="col">{item.name}</p>
-                            <path className="col">{item.memberNum}</path>
+                      <div key={keys} className="dropdown-row p-2"  onClick={() =>(window.location.href = `/admin/view-user/${item.uid}`)} >
+                        <div className="dropdown">
+                          <div className="row g-2">
+                          <p className="col-3">{item.memberNum}</p>
+                            <p className="col text-center">{item.name}</p>
                           </div>
                         </div>
                       </div>
@@ -114,6 +116,23 @@ function NavbarAdmin() {
               </div>
             </Nav.Item>
           </Navbar.Text>
+          {/* <Select
+            showSearch
+            style={{
+              width: 200,
+            }}
+            placeholder="Search to Select"
+            optionFilterProp="children"
+            filterOption={(input, resultAnt) =>
+              (resultAnt?.name ?? "").includes(input)
+            }
+            filterSort={(optionA, optionB) =>
+              (optionA?.name ?? "")
+                .toLowerCase()
+                .localeCompare((optionB?.name ?? "").toLowerCase())
+            }
+            options={resultAnt}
+          /> */}
 
           <Navbar.Toggle aria-controls="offcanvasNavbar" />
           <Navbar.Offcanvas
@@ -127,26 +146,23 @@ function NavbarAdmin() {
 
             <Offcanvas.Body className="justify-content-end flex-grow-1 pe-3">
               <Nav.Link className="item-nav-admin" href="/">
-              <IconHi.HiHome className="me-2"/>
+                <IconHi.HiHome className="me-2" />
                 Home
               </Nav.Link>
               {/* <Nav.Link className="item-nav-admin" href="/admin/add-rice">
                 Add Rice
               </Nav.Link> */}
               <Nav.Link className="item-nav-admin" href="/admin/manage-user">
-              <IconHi.HiOutlineUserGroup className="me-3"/>
+                <IconHi.HiOutlineUserGroup className="me-3" />
                 Manage User
               </Nav.Link>
               <Nav.Link className="item-nav-admin" href="/admin/qr-scanner">
-              <IconHi.HiQrcode className="me-3"/>
+                <IconHi.HiQrcode className="me-3" />
                 Scan QR
               </Nav.Link>
 
-              <Nav.Link
-                className="item-nav-admin"
-                onClick={() => SignOut()}
-              >
-                  <IconHi.HiLogout className="me-3"/>
+              <Nav.Link className="item-nav-admin" onClick={() => SignOut()}>
+                <IconHi.HiLogout className="me-3" />
                 <span className="no-icon">Log out</span>
               </Nav.Link>
             </Offcanvas.Body>

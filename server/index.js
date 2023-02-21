@@ -204,14 +204,39 @@ app.post("/rice/my-rice", jsonParser, (req, res) => {
   );
 });
 
+app.post("/rice", jsonParser, (req, res) => {
+  if (req.body.type !== "") {
+    sqlConnect.query(
+      "SELECT * FROM Rice WHERE RiceCategory=?",
+      req.body.type,
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          res.send(result);
+        }
+      }
+    );
+  } else {
+    sqlConnect.query("SELECT * FROM Rice", (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    });
+  }
+});
 app.get("/rice", jsonParser, (req, res) => {
-  sqlConnect.query("SELECT * FROM Rice", (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.send(result);
-    }
-  });
+
+    sqlConnect.query("SELECT * FROM Rice", (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    });
+  
 });
 
 app.get("/type", jsonParser, (req, res) => {
@@ -236,6 +261,7 @@ app.get("/type-dashboard", jsonParser, (req, res) => {
     }
   );
 });
+
 app.post("/rice/temp", jsonParser, (req, res) => {
   sqlConnect.query(
     "SELECT * FROM Temp  WHERE RiceID=?",

@@ -70,7 +70,6 @@ export default function Dashboard() {
           // className="w-100 h-100"
           // width='50'
           data={data}
-          textAlign="start"
           options={{
             // rotation:true,
             plugins: {

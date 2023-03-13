@@ -60,9 +60,9 @@ export default function ListRiceAdmin() {
       {rices.length !== 0  ? (
         <div className="mb-5 mt-2 pb-5">
           <Tab.Container id="top-tabs-example" defaultActiveKey="table">
-            <Nav variant="tabs">
+            <Nav variant="tabs" style={{overflowX:'scroll',overflowY:'hidden',maxWidth:'100%',WebkitOverflowScrolling:'touch',flexWrap:'nowrap',whiteSpace:'nowrap'}}>
               <Nav.Item>
-                <Nav.Link eventKey="table"  >
+                <Nav.Link eventKey="table">
                   ข้าวทั้งหมด ({rices.length})
                 </Nav.Link>
               </Nav.Item>

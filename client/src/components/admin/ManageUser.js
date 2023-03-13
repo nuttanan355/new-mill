@@ -100,39 +100,59 @@ export default function ManaageUser() {
         };
 
         // ----------------------------axja--------------
-
-        fetch(linkDB + "/signUp", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(jsonData),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.status === "sucess") {
-              Swal.fire({
-                position: "center",
-                icon: "sucess",
-                title: "SignUp sucess",
-                showConfirmButton: false,
-                timer: 1000,
-                timerProgressBar: true,
-              }).then(() => (window.location = "/admin/manage-user"));
-              // alert("SignUp sucess");
-            } else {
-              Swal.fire({
-                position: "center",
-                icon: "error",
-                title: "SignUp failed",
-                showConfirmButton: false,
-                timer: 1000,
-                timerProgressBar: true,
+        Swal.fire({
+          title: "ต้องการเพิ่ม admin ?",
+          text: "ยืนยันการเพิ่ม admin !",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            fetch(linkDB + "/signUp", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(jsonData),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                if (data.status === "sucess") {
+                  Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "SignUp sucess",
+                    showConfirmButton: false,
+                    timer: 1000,
+                    timerProgressBar: true,
+                  }).then(() => window.location.reload());
+                  // alert("SignUp sucess");
+                } else {
+                  Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "SignUp failed",
+                    showConfirmButton: false,
+                    timer: 1000,
+                    timerProgressBar: true,
+                  });
+                }
+                console.log("Error:", data);
+              })
+              .catch((error) => {
+                console.error("Error:", error);
               });
-            }
-            console.log("Error:", data);
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
+          }
+          else{
+            setValue ({
+              uid: genKey(),
+              phone: "",
+              fullName: "",
+              password: "",
+              passwordConfirm: "",
+            })
+          }
+        });
 
         //   axios
         //     .post(linkDB + "/signUp", jsonData)
@@ -224,7 +244,9 @@ export default function ManaageUser() {
                                 style={{ fontSize: "18px" }}
                                 className="btn-edit"
                                 title="แก้ไขผู้ใช้นี้"
-                                onClick={()=>window.location.hash='addAdmin'}
+                                onClick={() =>
+                                  (window.location.hash = "addAdmin")
+                                }
                               />
 
                               <IconAnt.DeleteTwoTone
@@ -241,65 +263,81 @@ export default function ManaageUser() {
                     />
                   </Tab.Pane>
 
-                  <Tab.Pane eventKey="addAdmin"  href="#addAdmin">
+                  <Tab.Pane eventKey="addAdmin" href="#addAdmin">
+                  <form className="was-validated">
                     <div className="container px-5">
                       <h4 id="date" className="container mt-5 mb-2">
                         เพิ่ม Admin
                       </h4>
-                      {/* phone: "",
-    fullName: "",
-    password: "",
-    passwordConfirm: "", */}
-                      <div className="w-50" style={{ margin: "0 auto" }}>
-                        <span>Phone</span>
-                        <input
-                          type="text"
-                          id="phone"
-                          name="phone"
-                          className="col form-control my-3"
-                          placeholder="Phone"
-                          onChange={handleOnChange}
-                          maxLength={10}
-                          required
-                        />
-                        <span>Full Name</span>
-                        <input
-                          id="fullName"
-                          name="fullName"
-                          className="col form-control my-3"
-                          placeholder="Full Name"
-                          onChange={handleOnChange}
-                          required
-                        />
-                        <span>Password</span>
-                        <input
-                          id="password"
-                          type="password"
-                          name="password"
-                          className="col form-control my-3"
-                          placeholder="Password"
-                          onChange={handleOnChange}
-                          required
-                        />
-                        <span>Password Confirm</span>
-                        <input
-                          id="passwordConfirm"
-                          name="passwordConfirm"
-                          type="password"
-                          className="col form-control my-3"
-                          placeholder="Password Confirm"
-                          onChange={handleOnChange}
-                          required
-                        />
+                      <div
+                        className="row"
+                        style={{ margin: "0 auto", width: "80%" }}
+                      >
+                        
+                        <label>
+                          Phone
+                          <input
+                            type="text"
+                            id="phone"
+                            name="phone"
+                            className="form-control my-3"
+                            placeholder="Phone"
+                            value={value.phone}
+                            onChange={handleOnChange}
+                            maxLength={10}
+                            required
+                          />
+                        </label>
+                        <label>
+                          Full Name
+                          <input
+                            id="fullName"
+                            name="fullName"
+                            value={value.fullName}
+                            className="col form-control my-3"
+                            placeholder="Full Name"
+                            onChange={handleOnChange}
+                            required
+                          />
+                        </label>
+                        <label>
+                          Password
+                          <input
+                            id="password"
+                            type="password"
+                            name="password"
+                            value={value.password}
+                            className="col form-control my-3"
+                            placeholder="Password"
+                            onChange={handleOnChange}
+                            required
+                          />
+                        </label>
+                        <label>
+                          Password Confirm
+                          <input
+                            id="passwordConfirm"
+                            name="passwordConfirm"
+                            type="password"
+                            value={value.passwordConfirm}
+                            className="col form-control my-3"
+                            placeholder="Password Confirm"
+                            onChange={handleOnChange}
+                            required
+                          />
+                        </label>
                         <button
                           type="button"
-                          className="col btn btn-success mt-3"
+                          className="btn btn-success mt-3"
                           onClick={async () => handleSubmit()}
+                          disabled={ value.phone === "" ||value.fullName === ""||value.password === ""||value.passwordConfirm === ""
+                          }
                         >
                           บันทึก{" "}
                         </button>
                       </div>
                     </div>
+                    </form>
                   </Tab.Pane>
                 </Tab.Content>
               </div>

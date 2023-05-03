@@ -12,7 +12,6 @@ import { RouterNoLogin } from "./pages/RouterNoLogin";
 import NavbarIndex from "./layout/NavbarIndex";
 import "charts.css";
 import { Layout, Space } from 'antd';
-import Footer from "./layout/Footer";
 
 
 function App() {
@@ -45,7 +44,6 @@ function App() {
               return <Route index path={path} element={element} key={key} />;
             })}
           </Routes>
-          
           {/* </Layout.Content> */}
           {/* <Header />
           <MenuAdmin />
@@ -58,7 +56,7 @@ function App() {
           </div>
           <Footer /> */}
 
-          <Footer />
+          {/* <Footer /> */}
         </>
       ) : admin === "User" ? (
         <>
